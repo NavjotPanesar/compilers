@@ -1,0 +1,15 @@
+# Indicate your collaborators in this file. Here are some examples:
+# Wallace was my mentor for lab2:
+# lab2 mentor cwwwu
+# I mentored Sanjay for lab3 (he was my protege):
+# lab3 protege ssingh
+# Jon and I discussed lab4:
+# lab4 verbal jeyolfso
+# Vajih and I worked together on lab5:
+# lab5 partner vmontagh
+# If you collaborate with multiple people on a lab, make a new line
+# in this file for each lab/role/person combination.
+#
+# Note: lines that start with # are comments.
+# Your data lines should not start with #, and should follow the
+# format discussed above in the examples.

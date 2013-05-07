@@ -1,0 +1,17 @@
+Document your class participation here.  You do not need to summarize
+your mentorship or collaboration here, since that it already recorded
+in collaboration.txt. You also do not need to report how many grace
+days you didn't use here, since that is recorded in grace.txt. During
+the term you will want to summarize for each week: 
+
+- Bugs you reported in the course skeleton code.
+- Patches you submitted to fix the course code.
+- Test cases you contributed.
+- Suggestions you made to improve the lab manual.
+- Questions you answered (correctly) in the online forum.
+- Practice exam questions (and answers) you contributed.
+- Any other contributions of note.
+
+------------------------------------------------------------------------
+
+
