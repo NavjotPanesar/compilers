@@ -2,8 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/alloy.jar"/>
-	<classpathentry kind="lib" path="lib/asm-all-3.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/parboiled-1.0.2-all.jar"/>
 	<classpathentry kind="lib" path="lib/batik-anim.jar"/>
 	<classpathentry kind="lib" path="lib/batik-css.jar"/>
 	<classpathentry kind="lib" path="lib/batik-dom.jar"/>
@@ -15,5 +13,8 @@
 	<classpathentry kind="lib" path="lib/xml-apis-ext.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/asm-all-4.1.jar"/>
+	<classpathentry kind="lib" path="lib/parboiled-java-1.1.5.jar"/>
+	<classpathentry kind="lib" path="lib/parboiled-core-1.1.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
