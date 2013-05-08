@@ -15,22 +15,27 @@
     </javac>
   </target>
 
+  <macrodef name="test">
+    <attribute name="name" />
+    <sequential>
+      <junit fork="yes">
+        <jvmarg value="-ea" />
+        <classpath>
+          <path refid="classpath" />
+          <path location="${build.dir}" />
+        </classpath>
+        <formatter type="brief" usefile="false" />
+        <batchtest>
+          <fileset dir="${build.dir}">
+            <include name="@{name}" />
+          </fileset>
+        </batchtest>
+      </junit>
+    </sequential>
+  </macrodef>
+
   <target name="test-prelab" depends="compile" description="Test Prelab">
-    <junit fork="yes">
-      <jvmarg value="-ea" />
-      <classpath>
-        <path refid="classpath" />
-        <path location="${build.dir}" />
-      </classpath>
-
-      <formatter type="brief" usefile="false" />
-
-      <batchtest>
-        <fileset dir="${build.dir}">
-          <include name="ece351/Test*.class" />
-        </fileset>
-      </batchtest>
-    </junit>
+    <test name="ece351/Test*" />
   </target>
 
   <target name="clean" description="Clean up build">
