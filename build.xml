@@ -2,21 +2,35 @@
   <property name="src.dir" location="src" />
   <property name="lib.dir"   value="lib" />
   <property name="build.dir" location="build" />
+  <property name="report.dir" location="report" />
 
   <path id="classpath">
     <fileset dir="${lib.dir}" includes="*.jar"/>
   </path>
 
+  <path id="tests-prelab">
+    <fileset dir="${build.dir}">
+      <include name="ece351/Test*" />
+    </fileset>
+  </path>
+
+  <path id="tests-lab-1">
+    <fileset dir="${build.dir}">
+      <include name="ece351/w/rdescent/Test*" />
+      <include name="ece351/w/regex/Test*" />
+    </fileset>
+  </path>
+
   <target name="compile" description="Compile the source">
     <mkdir dir="${build.dir}" />
     <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="classpath"
-           includeantruntime="false">
+           includeantruntime="true">
       <compilerarg value="-Xlint:unchecked" />
     </javac>
   </target>
 
   <macrodef name="test">
-    <attribute name="name" />
+    <attribute name="refid" />
     <sequential>
       <junit fork="yes">
         <jvmarg value="-ea" />
@@ -26,19 +40,45 @@
         </classpath>
         <formatter type="brief" usefile="false" />
         <batchtest>
-          <fileset dir="${build.dir}">
-            <include name="@{name}" />
-          </fileset>
+          <path refid="@{refid}" />
+        </batchtest>
+      </junit>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="report">
+    <attribute name="refid" />
+    <attribute name="folder" />
+    <sequential>
+      <mkdir dir="${report.dir}/@{folder}" />
+      <junit fork="yes">
+        <jvmarg value="-ea" />
+        <classpath>
+          <path refid="classpath" />
+          <path location="${build.dir}" />
+        </classpath>
+        <formatter classname="ece351.util.CSVFormatter" extension=".csv" />
+        <batchtest todir="${report.dir}/@{folder}">
+          <path refid="@{refid}" />
         </batchtest>
       </junit>
     </sequential>
   </macrodef>
 
   <target name="test-prelab" depends="compile" description="Test Prelab">
-    <test name="ece351/Test*" />
+    <test refid="tests-prelab" />
+  </target>
+
+  <target name="test-lab-1" depends="compile" description="Test Lab 1">
+    <test refid="tests-lab-1" />
+  </target>
+
+  <target name="report-lab-1" depends="compile" description="Report Lab 1">
+    <report refid="tests-lab-1" folder="lab-1" />
   </target>
 
   <target name="clean" description="Clean up build">
     <delete dir="${build.dir}" />
+    <delete dir="${report.dir}" />
   </target>
 </project>
