@@ -1,0 +1,30 @@
+# common code for all Makefiles
+
+.DEFAULT_GOAL=help
+
+# -e so that if any command in a pipeline fails then the pipeline fails
+# should work so long as /bin/sh is bash or dash
+SHELL=/bin/bash -e
+
+# command line argument to select solution variant
+SOLNVARIANT ?= $(GRAPHCSE)
+
+# command line argument to select code to execute
+JAVADIR ?= ../../ece351-$(USER)
+JARS = $(shell find $(JAVADIR)/lib/ -type f -name '*.jar' -printf '%p:')
+CLASSPATH = $(JAVADIR)/bin:$(JARS)
+JVM = nice java -ea -cp $(CLASSPATH)
+JAVAC = nice javac -g -cp $(CLASSPATH)
+
+DIFFFLAGS=-uwB
+
+commonhelp:
+	@echo "The default JAVADIR is $(JAVADIR)"
+	@echo "Set JAVADIR to an explicit value on the command line if necessary, e.g.:"
+	@echo "    make JAVADIR=../ece351-cwwwu testrecognize"
+	@echo "Set ARGS=-v for debug messages"
+
+classes:
+	@if [ ! -d $(JAVADIR) ] ; then echo "***** you need to set JAVADIR=??? on the command line"; exit 1 ; fi
+	cd $(JAVADIR) ; make classes
+
