@@ -29,7 +29,11 @@ public final class WRecursiveDescentRecognizer {
     }
 
     public void waveform() {
-// TODO: 10 lines snipped
-throw new ece351.util.Todo351Exception();
+    	lexer.consumeID();
+    	lexer.consume(":");
+    	while(!lexer.inspect(";")){
+    		lexer.consume("0","1");
+    	}
+    	lexer.advance();
     }
 }

@@ -24,90 +24,90 @@ public final class TestWRegexSimple {
 	}
 
 	/**
-	 * Copy the regex from testr1 and paste it in the TODO of this test.
+	 * Copy the regex from testr1 and paste it in the  of this test.
 	 * Run the test suite to confirm that it fails on the new input.
 	 * Generalize the regular expression so that it accepts the new input.
 	 */
 	@Test
 	public void testr2() {
-		final String regex = "TODO";
+		final String regex = "([A-Za-z]|\\d|[_])*:(( )*(0|1))+\\s*[;]+\\s*";
 		recognize(regex, "tests/wave/r2.wave");
 	}
 
 	/**
-	 * Copy the regex from above and paste it in the TODO of this test.
+	 * Copy the regex from above and paste it in the  of this test.
 	 * Run the test suite to confirm that it fails on the new input.
 	 * Generalize the regular expression so that it accepts the new input.
 	 */
 	@Test
 	public void testr3() {
-		final String regex = "TODO";
+		final String regex = "(\\s*[A-Za-z][A-Za-z\\d_]*\\s*:(\\s*[01])+\\s*;\\s*)+";
 		recognize(regex, "tests/wave/r3.wave");
 	}
 
 	/**
-	 * Copy the regex from above and paste it in the TODO of this test.
+	 * Copy the regex from above and paste it in the  of this test.
 	 * Run the test suite to confirm that it fails on the new input.
 	 * Generalize the regular expression so that it accepts the new input.
 	 */
 	@Test
 	public void testr4() {
-		final String regex = "TODO";
+		final String regex = "(\\s*[A-Za-z][A-Za-z\\d_]*\\s*:(\\s*[01])+\\s*;\\s*)+";
 		recognize(regex, "tests/wave/r4.wave");
 	}
 
 	/**
-	 * Copy the regex from above and paste it in the TODO of this test.
+	 * Copy the regex from above and paste it in the  of this test.
 	 * Run the test suite to confirm that it fails on the new input.
 	 * Generalize the regular expression so that it accepts the new input.
 	 */
 	@Test
 	public void testr5() {
-		final String regex = "TODO";
+		final String regex = "(\\s*[A-Za-z][A-Za-z\\d_]*\\s*:(\\s*[01])+\\s*;\\s*)+";
 		recognize(regex, "tests/wave/r5.wave");
 	}
 
 	/**
-	 * Copy the regex from above and paste it in the TODO of this test.
+	 * Copy the regex from above and paste it in the  of this test.
 	 * Run the test suite to confirm that it fails on the new input.
 	 * Generalize the regular expression so that it accepts the new input.
 	 */
 	@Test
 	public void testr6() {
-		final String regex = "TODO";
+		final String regex = "(\\s*[A-Za-z][A-Za-z\\d_]*\\s*:(\\s*[01])+\\s*;\\s*)+";
 		recognize(regex, "tests/wave/r6.wave");
 	}
 
 	/**
-	 * Copy the regex from above and paste it in the TODO of this test.
+	 * Copy the regex from above and paste it in the  of this test.
 	 * Run the test suite to confirm that it fails on the new input.
 	 * Generalize the regular expression so that it accepts the new input.
 	 */
 	@Test
 	public void testr7() {
-		final String regex = "TODO";
+		final String regex = "(\\s*[A-Za-z][A-Za-z\\d_]*\\s*:(\\s*[01])+\\s*;\\s*)+";
 		recognize(regex, "tests/wave/r7.wave");
 	}
 
 	/**
-	 * Copy the regex from above and paste it in the TODO of this test.
+	 * Copy the regex from above and paste it in the  of this test.
 	 * Run the test suite to confirm that it fails on the new input.
 	 * Generalize the regular expression so that it accepts the new input.
 	 */
 	@Test
 	public void testr8() {
-		final String regex = "TODO";
+		final String regex = "(\\s*[A-Za-z][A-Za-z\\d_]*\\s*:(\\s*[01])+\\s*;\\s*)+";
 		recognize(regex, "tests/wave/r8.wave");
 	}
 
 	/**
-	 * Copy the regex from above and paste it in the TODO of this test.
+	 * Copy the regex from above and paste it in the  of this test.
 	 * Run the test suite to confirm that it fails on the new input.
 	 * Generalize the regular expression so that it accepts the new input.
 	 */
 	@Test
 	public void testr9() {
-		final String regex = "TODO";
+		final String regex = "(\\s*[A-Za-z][A-Za-z\\d_]*\\s*:(\\s*[01])+\\s*;\\s*)+";
 		recognize(regex, "tests/wave/r9.wave");
 	}
 
