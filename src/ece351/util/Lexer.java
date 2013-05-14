@@ -1,130 +1,149 @@
 package ece351.util;
 
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
+import java.lang.Character;
+import java.lang.StringBuilder;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.parboiled.common.FileUtils;
-
-/**
- * Breaks a stream of input into tokens by wrapping the StreamTokenizer
- * JDK class. The JDK provides two tokenizer classes: StringTokenizer and
- * StreamTokenizer. The former is easier to use but not as powerful. The 
- * latter is more powerful but less easy to use. This class wraps 
- * StreamTokenizer for you to give you an easier interface.
- * 
- * @author drayside
- * @see java.util.StreamTokenizer
- * @see java.util.StringTokenizer
- */
 public final class Lexer {
 
-    protected final static Pattern ID = Pattern.compile("([A-Z]|[a-z])+");
-    
-	private final StreamTokenizer t;
-	
-	public Lexer(final String input) {
-		this.t = new StreamTokenizer(new StringReader(input));
-		t.ordinaryChar('.'); // otherwise it lexes . as a number
-		t.ordinaryChars('0', '9'); // lex all digits as ordinary characters
-		// TODO: allow adjacent zeros and ones in W; check it won't bread F
-		// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4049789
-		t.wordChars('0', '9'); // lex all digits as ordinary characters
-		t.ordinaryChar('\''); // otherwise it lexes ' as a string quote
-		t.wordChars('<', '='); // for assignment in F+VHDL
-		t.eolIsSignificant(false); // semi-colons separate statements
-		advance();
-	}
+    private enum Kind {
+        SIMPLE,
+        ID,
+        EOF,
+    }
 
-	public String consume(final String s) {
-		if (inspect(s)) {
-			advance();
-			return s;
-		} else {
-			err("expected : " + s);
-			return null; // dead code
-		}
-	}
+    private enum State {
+        START,
+        CONTINUE_ID,
+        CONTINUE_ASSIGN,
+    }
 
-	public boolean inspectID() {
-		if (t.ttype != StreamTokenizer.TT_WORD) return false;
-        final Matcher m = ID.matcher(t.sval);
-        return m.matches();
-	}
+    private final char[] input;
+    private int index;
+    private Kind kind;
+    private String token;
 
-	public String consumeID() {
-		if (!inspectID()) err("expected ID but found: " + t);
-		final String result = t.sval;
-		advance();
-		return result;
-	}
+    public Lexer(final String input) {
+        this.input = input.toCharArray();
+        this.index = 0;
+        advance();
+    }
 
-	public String consume(final String... options) {
-        for (final String s : options) {
-            if (inspect(s)) {
-                return consume(s);
+    private boolean isContinueID(char ch) {
+        return (Character.isLetter(ch) || Character.isDigit(ch) || ch == '_');
+    }
+
+    public void advance() {
+        StringBuilder stringBuilder = new StringBuilder();
+        State state = State.START;
+        kind = Kind.SIMPLE;
+
+        if (index == input.length) {
+            kind = Kind.EOF;
+        }
+
+        while (index < input.length) {
+            char ch = input[index];
+            ++index;
+
+            if (state == State.START) {
+                if (Character.isWhitespace(ch)) {
+                    // We may have got to the end by ignoring whitespace
+                    if (index == input.length) {
+                        kind = Kind.EOF;
+                    }
+                    continue;
+                }
+                else if (Character.isLetter(ch)) {
+                    kind = Kind.ID;
+                    state = State.CONTINUE_ID;
+                }
+                else if (ch == '=') {
+                    state = State.CONTINUE_ASSIGN;
+                }
+            }
+            else if (state == State.CONTINUE_ID) {
+                if (!isContinueID(ch)) {
+                    --index;
+                    break;
+                }
+            }
+            else if (state == State.CONTINUE_ASSIGN) {
+                if (ch == '>') {
+                    state = State.START;
+                }
+                else {
+                    --index;
+                    break;
+                }
+            }
+            stringBuilder.append(ch);
+            if (state == State.START) {
+                break;
             }
         }
-        // didn't match any of the options
-        err("expected one of " + Arrays.toString(options) + ", but had " + t);
-        return null;
-	}
-	
-	public void consumeEOF() {
-		if (t.ttype != StreamTokenizer.TT_EOF) err("expected EOF");
-		advance();
-	}
+        token = stringBuilder.toString();
+    }
 
-	public boolean inspect(final String s) {
-		if (t.ttype == StreamTokenizer.TT_WORD && t.sval.equals(s)) {
-			// words
-			return true;
-		} else if (s.length() == 1 && s.charAt(0) == t.ttype) {
-			// punctuation characters
-			return true;
-		} else if (t.ttype == StreamTokenizer.TT_NUMBER && Integer.toString((int)t.nval).equals(s)) {
-			// numbers such as 0 or 1
-			return true;
-		} else {
-			// no match
-			return false;
-		}
-	}
+    public boolean inspect(final String s) {
+        return token.equals(s);
+    }
 
-	/**
-	 * Returns true if any of the options match the current token.
-	 * @param options
-	 * @return
-	 */
-	public boolean inspect(final String... options) {
+    public boolean inspect(final String... options) {
         for (final String s : options) {
             if (inspect(s)) {
                 return true;
             }
         }
-        // didn't match any of the options
         return false;
-	}
+    }
+
+    public boolean inspectID() {
+        return kind == Kind.ID;
+    }
+
+    public boolean inspectEOF() {
+        return kind == Kind.EOF;
+    }
+
+    public String consume(final String s) {
+        if (token.equals(s)) {
+            advance();
+            return s;
+        }
+        else {
+            err("expected: '" + s + "' got '" + token + "'");
+            return null; // dead code
+        }
+    }
+
+    public String consume(final String... options) {
+        for (final String s : options) {
+            if (inspect(s)) {
+                return consume(s);
+            }
+        }
+        err("expected one of '" + Arrays.toString(options) + "' but had '"
+            + token + "'");
+        return null;
+    }
+
+    public String consumeID() {
+        if (!inspectID()) err("expected: ID got '" + token + "'");
+        final String result = token;
+        advance();
+        return result;
+    }
+
 	
-	public void advance() {
-		try {
-			Debug.msg("consuming: " + t);
-			t.nextToken();
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    public void consumeEOF() {
+        if (!inspectEOF()) err("expected: EOF");
+        advance();
+    }
 
-	public boolean inspectEOF() {
-		return t.ttype == StreamTokenizer.TT_EOF;
-	}
-
-	public String debugState() {
-		return t.toString();
-	}
+    public String debugState() {
+        return token;
+    }
     
     protected void err(final String msg) {
         Debug.barf(msg);
