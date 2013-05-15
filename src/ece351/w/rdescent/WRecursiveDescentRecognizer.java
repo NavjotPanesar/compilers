@@ -22,6 +22,7 @@ public final class WRecursiveDescentRecognizer {
     }
 
     public void program() {
+        waveform();
         while (!lexer.inspectEOF()) {
             waveform();
         }
