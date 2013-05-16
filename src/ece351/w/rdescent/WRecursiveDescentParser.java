@@ -20,16 +20,17 @@ public final class WRecursiveDescentParser {
 
     public WProgram parse() {
     	ece351.w.ast.WProgram prog = new ece351.w.ast.WProgram();
-    	while(!lexer.inspectEOF()){
+    	do{
 	    	String name = lexer.consumeID();
 	    	lexer.consume(":");
 	    	ece351.w.ast.Waveform wf = new ece351.w.ast.Waveform(name);
+	    	wf = wf.append(lexer.consume("0","1"));//Must be at least one digit
 	    	while(!lexer.inspect(";")){
-	    		wf = wf.append(lexer.consume("0","1"));
+	    		wf = wf.append(lexer.consume("0","1"));//Really not efficient, but oh well :)
 	    	}
 	    	lexer.consume(";");
 	    	prog = prog.append(wf);
-    	}
+    	}while(!lexer.inspectEOF());
     	return prog;
     }
 }

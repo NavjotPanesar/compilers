@@ -32,6 +32,7 @@ public final class WRecursiveDescentRecognizer {
     public void waveform() {
     	lexer.consumeID();
     	lexer.consume(":");
+    	lexer.consume("0","1");//Must be at least one digit
     	while(!lexer.inspect(";")){
     		lexer.consume("0","1");
     	}
