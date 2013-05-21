@@ -48,8 +48,8 @@ public final class TestW2SVG {
 		System.out.println("transforming " + inputSpec);
 
 		// produce the SVG
-		final String useDOM = TransformW2SVG.USE_DOM_XML_PARSER ? "-d" : "";
-		final CommandLine c = new CommandLine("-h", useDOM, "-f", studentOut, inputSpec);
+		final CommandLine c = (TransformW2SVG.USE_DOM_XML_PARSER) ? new CommandLine("-h", "-d", "-f", studentOut, inputSpec)
+		                                                          : new CommandLine("-h", "-f", studentOut, inputSpec);
 		TransformW2SVG.main(c);
 
 		// read student SVG file
