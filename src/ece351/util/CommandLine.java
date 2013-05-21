@@ -66,7 +66,10 @@ public final class CommandLine {
 		boolean d = false;
 		int o = 1; // Default level for simplifier
 		for (int i = 0; i < args.length; i++) {
-			if (args[i].startsWith("-h")) { 
+			if (args[i].length() == 0 || args[i].replaceAll(" *", "").length() == 0) {
+				// ignore empty strings
+				continue;
+			} else if (args[i].startsWith("-h")) { 
 				h = true;
 				continue;
 			} else if (args[i].startsWith("-p")) { 
