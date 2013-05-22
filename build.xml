@@ -21,6 +21,13 @@
     </fileset>
   </path>
 
+  <path id="tests-lab-2">
+    <fileset dir="${build.dir}">
+      <include name="ece351/w/svg/TestW2SVG*" />
+      <include name="ece351/util/TestObjectContract.class" />
+    </fileset>
+  </path>
+
   <target name="compile" description="Compile the source">
     <mkdir dir="${build.dir}" />
     <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="classpath"
@@ -32,7 +39,7 @@
   <macrodef name="test">
     <attribute name="refid" />
     <sequential>
-      <junit fork="yes" timeout="1000">
+      <junit fork="yes" timeout="5000">
         <jvmarg value="-ea" />
         <classpath>
           <path refid="classpath" />
@@ -51,7 +58,7 @@
     <attribute name="folder" />
     <sequential>
       <mkdir dir="${report.dir}/@{folder}" />
-      <junit fork="yes" timeout="1000">
+      <junit fork="yes" timeout="5000">
         <jvmarg value="-ea" />
         <classpath>
           <path refid="classpath" />
@@ -75,6 +82,14 @@
 
   <target name="report-lab-1" depends="compile" description="Report Lab 1">
     <report refid="tests-lab-1" folder="lab-1" />
+  </target>
+
+  <target name="test-lab-2" depends="compile" description="Test Lab 2">
+    <test refid="tests-lab-2" />
+  </target>
+
+  <target name="report-lab-2" depends="compile" description="Report Lab 2">
+    <report refid="tests-lab-2" folder="lab-2" />
   </target>
 
   <target name="clean" description="Clean up build">
