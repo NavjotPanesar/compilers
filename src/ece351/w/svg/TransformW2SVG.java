@@ -62,37 +62,59 @@ public final class TransformW2SVG {
 		out.println();
 
 		final int WIDTH = 100;
-		
-		int y_mid = 150;
-		int y_prev = 150;
 		int y_pos =150;
 		final int y_off =50;
-
+		int y_diff = 150;
 		// loop on waveforms
 		// this line implicitly uses an iterator
 		for (final Waveform w : wp.waveforms) {
 			// reset the initial x position
 			int x = 50;
-
 			// write out the waveform name
-			out.println(Pin.toSVG(w.name, x, y_mid));
-
+			out.println(Pin.toSVG(w.name, x, y_pos));
+			
 			// advance the x position to start drawing
-			x=100;
-
+			//x = Math.max(w.name.length()*15, 150);
+			//^ Really this is a better way of handling position for variable label size
+			x += 100;
 			// loop on bits
+			String pre_bit = "x";
 			for (final String bit : w.bits) {
 				// set the y position according to the value of the bit
-				// draw the vertical line
-				// draw the horizontal line
-				// get ready for the next bit
-// TODO: 17 lines snipped
-throw new ece351.util.Todo351Exception();
+				if(pre_bit.equals("x")){
+					//startbit
+					if(bit.equals("1")){
+						//print |``
+						out.println(Line.toSVG(x,y_pos,x,y_pos-y_off));
+						out.println(Line.toSVG(x,y_pos-y_off,x+WIDTH,y_pos-y_off));
+					}else{
+						out.println(Line.toSVG(x,y_pos,x,y_pos+y_off));
+						out.println(Line.toSVG(x,y_pos+y_off,x+WIDTH,y_pos+y_off));
+					}
+				}else if(pre_bit != bit){
+					//transition
+					if(bit.equals("1")){
+						//0 to 1
+						out.println(Line.toSVG(x,y_pos+y_off,x,y_pos-y_off));
+						out.println(Line.toSVG(x,y_pos-y_off,x+WIDTH,y_pos-y_off));
+					}else{
+						//1 to 0
+						out.println(Line.toSVG(x,y_pos-y_off,x,y_pos+y_off));
+						out.println(Line.toSVG(x,y_pos+y_off,x+WIDTH,y_pos+y_off));
+					}
+				}else{
+					if(bit.equals("1")){
+						out.println(Line.toSVG(x,y_pos-y_off,x+WIDTH,y_pos-y_off));
+					}else{
+						out.println(Line.toSVG(x,y_pos+y_off,x+WIDTH,y_pos+y_off));
+					}
+					//continuation
+				}
+				x+=WIDTH;
+				pre_bit = bit;
 			}
-			
 			// advance the y position for the next pin
-// TODO: 4 lines snipped
-throw new ece351.util.Todo351Exception();
+			y_pos += y_diff;
 
 		}
 

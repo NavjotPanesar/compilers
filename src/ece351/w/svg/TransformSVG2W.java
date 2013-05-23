@@ -11,7 +11,7 @@ import org.parboiled.common.ImmutableList;
 
 import ece351.w.ast.WProgram;
 import ece351.w.ast.Waveform;
-
+import java.io.PrintWriter;
 
 public final class TransformSVG2W {
 	
@@ -24,12 +24,9 @@ public final class TransformSVG2W {
 
 		// sort the line segments by their Y position
 		Collections.sort(lines, COMPARE_Y_X);
-
+		Collections.sort(pins,COMPARE_Y);
 		// Place holder for the list of waveforms in the final WProgram result.
 		ImmutableList<Waveform> waveforms = ImmutableList.of();
-
-		// the set of Y values in use for the current waveform
-		final Set<Integer> setY = new LinkedHashSet<Integer>();
 
 		// the set of line segments for the current waveform
 		final List<Line> extract = new ArrayList<Line>();
@@ -37,16 +34,22 @@ public final class TransformSVG2W {
 		// lines are taken off the global list and added to the extract list
 		// then the extract list is used to construct a new waveform object 
 		// finally, the extract list is cleared and the process repeats
+		int midpoint_y = 0;
 		while(!lines.isEmpty()) {
 			final Line line = lines.remove(0);
-
-// TODO: 16 lines snipped
-throw new ece351.util.Todo351Exception();
+			if(midpoint_y == 0){
+				//should always start from the midpoint of the line regardless of value
+				midpoint_y = line.y1;
+			}else if(line.y1 >= midpoint_y+150){
+				waveforms = waveforms.append(transformLinesToWaveform(extract,pins.remove(0)));
+				extract.clear();
+				midpoint_y = line.y1;
+				//new line just started
+			}
+			extract.add(line);
 		}
-
-		// the last waveform
 		if(!extract.isEmpty()) {
-			waveforms = waveforms.append(transformLinesToWaveform(extract, pins));
+			waveforms = waveforms.append(transformLinesToWaveform(extract,pins.remove(0)));
 		}
 
 		return new WProgram(waveforms);
@@ -55,32 +58,56 @@ throw new ece351.util.Todo351Exception();
 	/**
 	 * Transform a list of Line to an instance of Waveform
 	 */
-	private static Waveform transformLinesToWaveform(final List<Line> lines, final List<Pin> pins) {
+	private static boolean is_vertical(Line line){
+		if(line.x1 == line.x2) return true;
+		return false;
+	}
+	private static int length_in_bits(Line line){
+		return (int)Math.ceil((line.x2 - line.x1)/100);
+	}
+	
+	private static Waveform transformLinesToWaveform(final List<Line> lines, final Pin pin) {
 		if(lines.isEmpty()) return null;
 
 		// Sort by the middle of two x-coordinates.
 		Collections.sort(lines, COMPARE_X);
-
 		// Place holder for the list of bits.
 		ImmutableList<String> bits = ImmutableList.of();
-
 		// The first line of the waveform.
-		final Line first = lines.get(0);
-
-		for(int i = 1; i < lines.size(); i++) {
-			// If a dot, skip it.
-// TODO: 10 lines snipped
-throw new ece351.util.Todo351Exception();
-		}
-
 		// Get the corresponding id for this waveform.
-		String id = "UNKNOWN";
-// TODO: 7 lines snipped
-throw new ece351.util.Todo351Exception();
-
+		final Line first = lines.get(0);
+		int midpoint = first.y1;
+		String id = pin.id;
+		for(int i = 1; i < lines.size(); i++) {
+			final Line line = lines.get(i);
+			if(is_vertical(line)){
+				continue;
+				//line was vertical skip it
+			}else{
+				if(line.y1 < midpoint){
+					int num_bits = length_in_bits(line);
+					for(int x = 0; x < num_bits; x++){
+						bits = bits.append("1");
+					}
+				}
+				else{
+					int num_bits = length_in_bits(line);
+					for(int x = 0; x < num_bits; x++){
+						bits = bits.append("0");
+					}
+				}
+			}
+		}
 		return new Waveform(bits, id);
 	}
-
+	public final static Comparator<Pin> COMPARE_Y = new Comparator<Pin>() {
+		@Override
+		public int compare(final Pin P1, final Pin P2) {
+			if(P1.y < P2.y) return -1;
+			if(P1.y > P2.y) return 1;
+			return 0;
+		}
+	};
 	public final static Comparator<Line> COMPARE_X = new Comparator<Line>() {
 		@Override
 		public int compare(final Line l1, final Line l2) {
