@@ -56,7 +56,7 @@ public final class TestInputs351 {
 	}
 	
 	public static Collection<Object[]> badDefVhdlFiles() {
-		return oneD2twoD(Utils351.files("tests/vhdl/undefined-var", "^.*\\.vhd$"));
+		return oneD2twoD(Utils351.files("tests/vhdl/undefined_var", "^.*\\.vhd$"));
 	}
 	
 	public static Collection<Object[]> desugaredVhdlFiles() {
@@ -85,7 +85,9 @@ public final class TestInputs351 {
 	}
 
 	
-	public final static boolean knownIsomorphicFormulas(final String f1, final String f2) {
+	public final static boolean knownIsomorphicFormulas(String f1, String f2) {
+		f1 = f1.replace(".f", "");
+		f2 = f2.replace(".f", "");
 		final Set<String> s = ISOMORPHIC_FORMULAS.get(f1);
 		if (s == null) {
 			return false;
@@ -94,7 +96,9 @@ public final class TestInputs351 {
 		}
 	}
 	
-	public final static boolean knownEquivalentFormulas(final String f1, final String f2) {
+	public final static boolean knownEquivalentFormulas(String f1, String f2) {
+		f1 = f1.replace(".f", "");
+		f2 = f2.replace(".f", "");
 		final Set<String> s = EQUIVALENT_FORMULAS.get(f1);
 		if (s == null) {
 			return false;
@@ -110,66 +114,66 @@ public final class TestInputs351 {
 		final Map<String,Set<String>> m = new TreeMap<String,Set<String>>();
 
 		// isomorphic
-		m.put("ex02.f", s("ex04.f"));
-		m.put("ex05.f", s("ex11.f"));
-		m.put("opt0-left-parens.f", s("opt0-no-parens.f"));
-		m.put("opt1-and-false1.f", s("opt1-and-false2.f"));
-		m.put("opt1-and-true1.f", s("opt1-and-true2.f"));
-		m.put("opt1-false-and-true.f", s("opt1-true-and-false.f"));
-		m.put("opt1-false-or-true.f", s("opt1-true-or-false.f"));
-		m.put("opt1-or-false1.f", s("opt1-or-false2.f"));
-		m.put("opt1-or-true1.f", s("opt1-or-true2.f"));
-		m.put("opt2-and1.f", s("opt2-and2.f"));
-		m.put("opt2-or1.f", s("opt2-or2.f"));
-		m.put("opt4-and-or.f", s("opt4-and-or2.f"));
-		m.put("opt4-or-no-paren.f", s("opt4-or-and.f"));
-		m.put("z02.f", s("z06.f", "z07.f", "z08.f"));
-		m.put("z10.f", s("z11.f", "z12.f"));
-		m.put("cse2.f", s("cse4.f"));
-		m.put("cse3.f", s("cse5.f"));
+		m.put("ex02", s("ex04"));
+		m.put("ex05", s("ex11"));
+		m.put("opt0_left_parens", s("opt0_no_parens"));
+		m.put("opt1_and_false1", s("opt1_and_false2"));
+		m.put("opt1_and_true1", s("opt1_and_true2"));
+		m.put("opt1_false_and_true", s("opt1_true_and_false"));
+		m.put("opt1_false_or_true", s("opt1_true_or_false"));
+		m.put("opt1_or_false1", s("opt1_or_false2"));
+		m.put("opt1_or_true1", s("opt1_or_true2"));
+		m.put("opt2_and1", s("opt2_and2"));
+		m.put("opt2_or1", s("opt2_or2"));
+		m.put("opt4_and_or", s("opt4_and_or2"));
+		m.put("opt4_or_no_paren", s("opt4_or_and"));
+		m.put("z02", s("z06", "z07", "z08"));
+		m.put("z10", s("z11", "z12"));
+		m.put("cse2", s("cse4"));
+		m.put("cse3", s("cse5"));
 		invert(m);
 		ISOMORPHIC_FORMULAS = freeze(m);
 
 		// equivalent
-		madd(m, "ex00.f", s(
-				"opt1-and-false1.f",
-				"opt1-false-and-false.f",
-				"opt1-false-and-true.f",
-				"opt1-not-true-and-false.f",
-				"opt1-not-true-or-false.f",
-				"opt1-not-true.f",
-				"opt1-false-or-false.f",
-				"opt2-and1.f"
+		madd(m, "ex00", s(
+				"opt1_and_false1",
+				"opt1_false_and_false",
+				"opt1_false_and_true",
+				"opt1_not_true_and_false",
+				"opt1_not_true_or_false",
+				"opt1_not_true",
+				"opt1_false_or_false",
+				"opt2_and1"
 				));
-		madd(m, "ex01.f", s(
-				"opt1-false-or-true.f",
-				"opt1-not-false-and-true.f",
-				"opt1-not-false-or-false.f",
-				"opt1-not-false-or-true.f",
-				"opt1-not-false.f",
-				"opt1-or-true1.f",
-				"opt1-true-and-true.f",
-				"opt1-true-or-true.f",
-				"opt2-or1.f"
+		madd(m, "ex01", s(
+				"opt1_false_or_true",
+				"opt1_not_false_and_true",
+				"opt1_not_false_or_false",
+				"opt1_not_false_or_true",
+				"opt1_not_false",
+				"opt1_or_true1",
+				"opt1_true_and_true",
+				"opt1_true_or_true",
+				"opt2_or1"
 				));
-		madd(m, "ex02.f", s(
-				"opt1-and-true1.f",
-				"opt1-or-false1.f",
-				"opt3-and-dup.f",
-				"opt3-or-dup.f",
-				"opt4-and-or.f",
-				"opt4-or-and.f",
-				"nary-or.f"
+		madd(m, "ex02", s(
+				"opt1_and_true1",
+				"opt1_or_false1",
+				"opt3_and_dup",
+				"opt3_or_dup",
+				"opt4_and_or",
+				"opt4_or_and",
+				"nary_or"
 				));
-		madd(m, "ex03.f", s(
-				"opt5-not-and.f"
+		madd(m, "ex03", s(
+				"opt5_not_and"
 				));
-		madd(m, "ex05.f", s(
-				"opt4-big2.f"
+		madd(m, "ex05", s(
+				"opt4_big2"
 				));
-		madd(m, "opt0-left-parens.f", s(
-				"opt0-right-parens.f",
-				"opt5-fixed-point.f"
+		madd(m, "opt0_left_parens", s(
+				"opt0_right_parens",
+				"opt5_fixed_point"
 				));
 		invert(m);
 		EQUIVALENT_FORMULAS = freeze(m);
