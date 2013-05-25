@@ -58,7 +58,7 @@ public final class Lexer {
                     kind = Kind.ID;
                     state = State.CONTINUE_ID;
                 }
-                else if (ch == '=') {
+                else if (ch == '<') {
                     state = State.CONTINUE_ASSIGN;
                 }
             }
@@ -69,7 +69,7 @@ public final class Lexer {
                 }
             }
             else if (state == State.CONTINUE_ASSIGN) {
-                if (ch == '>') {
+                if (ch == '=') {
                     state = State.START;
                 }
                 else {
