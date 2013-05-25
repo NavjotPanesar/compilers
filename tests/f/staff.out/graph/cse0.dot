@@ -1,0 +1,29 @@
+digraph g {
+    // header
+    rankdir=LR;
+    margin=0.01;
+    node [shape="plaintext"];
+    edge [arrowhead="diamond"];
+    // circuit 
+    var0[label="Z"];
+    var3[label="X"];
+    var7[label="T"];
+    var13[label="Y"];
+    var17[label="R"];
+    or26 [label="or26", image="gates/or_noleads.png"];
+    or23 [label="or23", image="gates/or_noleads.png"];
+    Const1[label="'1'"];
+    var14[label="A"];
+    var9[label="B"];
+    var18[label="C"];
+    Const1 -> var0 ;
+    var14 -> or23 ;
+    var9 -> or23 ;
+    or23 -> var3 ;
+    var14 -> or26 ;
+    var9 -> or26 ;
+    var18 -> or26 ;
+    or26 -> var7 ;
+    or23 -> var13 ;
+    or26 -> var17 ;
+}

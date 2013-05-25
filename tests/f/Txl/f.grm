@@ -1,0 +1,43 @@
+keys
+	and or nand nor xor xnor not
+end keys
+
+define program
+	[repeat assignment_statement]
+end define
+
+compounds
+	<=
+end compounds
+
+define assignment_statement
+	[id] '<= [expression] ';
+end define
+
+define expression
+	[relation] [opt logic_operator_relation]
+end define
+
+define logic_operator_relation
+	[logical_operator] [relation]
+end define
+
+define prefixnot
+	'not
+end define
+
+define relation
+		[id]
+	|	([opt prefixnot] [expression])
+	|	[opt prefixnot] [relation]
+	|	[number]
+end define
+
+define logical_operator
+		and
+	|	or
+	|	nand
+	|	nor
+	|	xor
+	|	xnor
+end define

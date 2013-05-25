@@ -1,0 +1,13 @@
+digraph g {
+    // header
+    rankdir=LR;
+    margin=0.01;
+    node [shape="plaintext"];
+    edge [arrowhead="plain"];
+    // circuit: X = D . (A + B); Y = E . (A + B)
+    or1 [label="", image="or.png"];
+    A -> or1;
+    B -> or1;
+    or1 -> X;
+    or1 -> Y;
+}
