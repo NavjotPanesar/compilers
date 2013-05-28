@@ -168,19 +168,29 @@ throw new ece351.util.Todo351Exception();
 	@Override
 	protected final Expr simplifyOnce() {
 		assert repOk();
-		final Expr result = simplifyChildren().mergeGrandchildren().removeIdentityElements().removeDuplicates().simpleAbsorption().subsetAbsorption().singletonify();
+		final Expr result = 
+				simplifyChildren().
+				mergeGrandchildren().
+				removeIdentityElements().
+				removeDuplicates().
+				simpleAbsorption().
+				subsetAbsorption().
+				singletonify();
 		assert result.repOk();
 		return result;
 	}
 	
 
 	private NaryExpr simplifyChildren() {
-		final List<Expr> simplifiedChildren = new ArrayList<Expr>(children.size());
-		// simplify all children in the n-ary expression
+		final ImmutableList<Expr> emptyList = ImmutableList.of();
+		NaryExpr result = newNaryExpr(emptyList);
 		for (final Expr e : children) {
-			simplifiedChildren.add(e.simplify());
+			result = result.append(e.simplify());
 		}
-		return newNaryExpr(simplifiedChildren);
+		// note: we do not assert repOk() here because the rep might not be ok
+		// the result might contain duplicate children, and the children
+		// might be out of order
+		return result;
 	}
 
 	
