@@ -36,10 +36,10 @@
     </fileset>
   </path>
 
-  <target name="compile" description="Compile the source"  unless="dont.run.compile">
+  <target name="compile" description="Compile the source">
     <mkdir dir="${build.dir}" />
     <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="classpath"
-           includeantruntime="true">
+           includeantruntime="true" failonerror="false">
       <compilerarg value="-Xlint:unchecked" />
     </javac>
   </target>
