@@ -36,7 +36,7 @@
     </fileset>
   </path>
 
-  <target name="compile" description="Compile the source">
+  <target name="compile" description="Compile the source"  unless="dont.run.compile">
     <mkdir dir="${build.dir}" />
     <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="classpath"
            includeantruntime="true">
