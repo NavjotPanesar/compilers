@@ -28,6 +28,14 @@
     </fileset>
   </path>
 
+  <path id="tests-lab-3">
+    <fileset dir="${build.dir}">
+      <include name="ece351/f/rdescent/TestFRDRecognizer*" />
+      <include name="ece351/f/TestObjectContractF*" />
+      <include name="ece351/f/rdescent/TestFRDParser*" />
+    </fileset>
+  </path>
+
   <target name="compile" description="Compile the source">
     <mkdir dir="${build.dir}" />
     <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="classpath"
@@ -58,7 +66,7 @@
     <attribute name="folder" />
     <sequential>
       <mkdir dir="${report.dir}/@{folder}" />
-      <junit fork="yes" timeout="5000">
+      <junit fork="yes" timeout="10000">
         <jvmarg value="-ea" />
         <classpath>
           <path refid="classpath" />
@@ -90,6 +98,14 @@
 
   <target name="report-lab-2" depends="compile" description="Report Lab 2">
     <report refid="tests-lab-2" folder="lab-2" />
+  </target>
+
+  <target name="test-lab-3" depends="compile" description="Test Lab 3">
+    <test refid="tests-lab-3" />
+  </target>
+
+  <target name="report-lab-3" depends="compile" description="Report Lab 3">
+    <report refid="tests-lab-3" folder="lab-3" />
   </target>
 
   <target name="clean" description="Clean up build">
