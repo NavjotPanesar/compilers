@@ -9,6 +9,7 @@ public final class Lexer {
     private enum Kind {
         SIMPLE,
         ID,
+        KEYWORD,
         EOF,
     }
 
@@ -83,6 +84,9 @@ public final class Lexer {
             }
         }
         token = stringBuilder.toString();
+        if (token.equals("and") || token.equals("or") || token.equals("not")) {
+            kind = Kind.KEYWORD;
+        }
     }
 
     public boolean inspect(final String s) {
