@@ -42,14 +42,43 @@ public final class FRecursiveDescentRecognizer implements VConstants {
         lexer.consume(";");
     }
     
-    void expr() { throw new Todo351Exception(); } // TODO
-    void term() { throw new Todo351Exception(); } // TODO
-	void factor() { throw new Todo351Exception(); } // TODO
-	void var() { throw new Todo351Exception(); } // TODO
-	void constant() { throw new Todo351Exception(); } // TODO
-
-// TODO: 45 lines snipped
-
+    void expr() { 
+        term();
+        while(lexer.inspect(AND)){
+            lexer.consume(AND);
+            term();
+        }
+    
+    }
+    void term() {
+        factor();
+        while(lexer.inspect(OR)){
+            lexer.consume(OR);
+            factor();
+        }
+    }
+    void factor() { 
+        if(lexer.inspect(NOT)){
+        	lexer.consume(NOT);
+            factor();
+        }else if(lexer.inspect("(")){
+            lexer.consume("(");
+            expr();
+            lexer.consume(")");
+        }else if(peekConstant()){// we have a constant
+            constant();
+        }else{
+            var();
+        }
+    }
+    void var() { 
+        lexer.consumeID();
+    }
+    void constant() { 
+        lexer.consume("'");
+        lexer.consume("0","1");
+        lexer.consume("'");
+    }
     // helper functions
     private boolean peekConstant() {
         final boolean result = lexer.inspect("'"); //constants start (and end) with single quote
