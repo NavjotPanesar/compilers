@@ -9,6 +9,9 @@ import ece351.f.ast.*;
 import ece351.common.ast.*;
 import org.junit.Test;
 
+/**
+ * The new simplifier tests that do not depend on the F parser.
+ */
 public final class TestSimplifier2 {
 	protected final void test(final String name, final FProgram original, final FProgram simplified) {
 		System.out.println(name);

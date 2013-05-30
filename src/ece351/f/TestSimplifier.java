@@ -18,7 +18,11 @@ import ece351.util.CommandLine.FSimplifierOptions;
 import ece351.util.ExaminableProperties;
 import ece351.util.TestInputs351;
 
-
+/**
+ * These are the old simplifier tests that depend on your F parser.
+ * We recommend that you use the new TestSimplifier2 instead, because
+ * it does not depend on your F parser.
+ */
 @RunWith(Parameterized.class)
 public final class TestSimplifier {
 
