@@ -22,7 +22,7 @@ public final class TestWRegexAccept {
 	 * Now you have a fairly general regex. Copy and paste it into this static
 	 * variable and let's try to match it against all of the test wave files.
 	 */
-	final static String REGEX = "TODO"; // TODO: edit this regex
+	final static String REGEX = "(\\s*[A-Za-z][A-Za-z\\d_]*\\s*:(\\s*[01])+\\s*;\\s*)+";
 	
 	private final File wave;
 

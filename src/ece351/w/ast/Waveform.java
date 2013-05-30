@@ -59,9 +59,11 @@ public final class Waveform implements Examinable {
 	
 	@Override
 	public String toString() {
-		
-// TODO: 1 lines snipped
-throw new ece351.util.Todo351Exception();
+		java.lang.StringBuffer bits = new java.lang.StringBuffer();
+		for(String bit :this.bits){
+			bits.append(" "+bit);
+		}
+		return this.name+":"+bits+";";
 	}
 
 	/**

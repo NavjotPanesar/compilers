@@ -87,9 +87,11 @@ public final class WProgram implements Examinable {
 	
 	@Override
 	public String toString() {
-		
-// TODO: 6 lines snipped
-throw new ece351.util.Todo351Exception();
+		java.lang.StringBuffer wave_out = new java.lang.StringBuffer();
+		for(Waveform wf : this.waveforms){
+			wave_out.append(wf.toString()+"\n");
+		}
+		return wave_out.toString();
 	}
 
 	/**

@@ -19,8 +19,18 @@ public final class WRecursiveDescentParser {
     }
 
     public WProgram parse() {
-    	
-// TODO: 29 lines snipped
-throw new ece351.util.Todo351Exception();
+    	ece351.w.ast.WProgram prog = new ece351.w.ast.WProgram();
+    	do{
+	    	String name = lexer.consumeID();
+	    	lexer.consume(":");
+	    	ece351.w.ast.Waveform wf = new ece351.w.ast.Waveform(name);
+	    	wf = wf.append(lexer.consume("0","1"));//Must be at least one digit
+	    	while(!lexer.inspect(";")){
+	    		wf = wf.append(lexer.consume("0","1"));//Really not efficient, but oh well :)
+	    	}
+	    	lexer.consume(";");
+	    	prog = prog.append(wf);
+    	}while(!lexer.inspectEOF());
+    	return prog;
     }
 }
