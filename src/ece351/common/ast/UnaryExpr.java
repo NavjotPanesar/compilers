@@ -24,9 +24,7 @@ public abstract class UnaryExpr extends Expr {
 		if (obj == null) return false;
 		if (!obj.getClass().equals(this.getClass())) return false;
 		final UnaryExpr that = (UnaryExpr) obj;
-		// compare field values using e.examine(x,y)
-// TODO: 1 lines snipped
-throw new ece351.util.Todo351Exception();
+		return e.examine(this.expr,that.expr);
     }
     
     @Override

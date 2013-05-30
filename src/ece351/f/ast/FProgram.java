@@ -94,11 +94,7 @@ public final class FProgram implements Examinable {
 		if (obj == null) return false;
 		if (!obj.getClass().equals(this.getClass())) return false;
 		final FProgram that = (FProgram) obj;
-		
-		// compare field values using Examiner.orderedExamination()
-		// no significant differences
-// TODO: 4 lines snipped
-throw new ece351.util.Todo351Exception();
+		return Examiner.orderedExamination(Examiner.Equals,this.formulas,that.formulas);
 	}
 	
 	@Override
@@ -107,11 +103,7 @@ throw new ece351.util.Todo351Exception();
 		if (obj == null) return false;
 		if (!obj.getClass().equals(this.getClass())) return false;
 		final FProgram that = (FProgram) obj;
-		
-		// compare field values using Examiner.unorderedExamination()
-		// no significant differences
-// TODO: 4 lines snipped
-throw new ece351.util.Todo351Exception();
+		return Examiner.unorderedExamination(Examiner.Isomorphic,this.formulas,that.formulas);
 	}
 
 	/**

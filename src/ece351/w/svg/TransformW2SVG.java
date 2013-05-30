@@ -17,7 +17,7 @@ public final class TransformW2SVG {
 	 * Try changing the value of this flag and see how it changes the performance
 	 * of the test harnesses.
 	 */
-	public static final boolean USE_DOM_XML_PARSER = true;
+	public static final boolean USE_DOM_XML_PARSER = false;
 
 	
 	public static void main(final CommandLine c) {

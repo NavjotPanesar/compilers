@@ -1,4 +1,5 @@
 package ece351.f.rdescent;
+import org.omg.PortableServer.IdAssignmentPolicy;
 import org.parboiled.common.ImmutableList;
 
 import ece351.common.ast.AndExpr;
@@ -13,6 +14,7 @@ import ece351.util.CommandLine;
 import ece351.util.Lexer;
 import ece351.util.Todo351Exception;
 import ece351.vhdl.VConstants;
+import edu.mit.csail.sdg.alloy4compiler.ast.ExprConstant;
 
 
 
@@ -64,14 +66,46 @@ public final class FRecursiveDescentParser implements VConstants {
         lexer.consume(";");
         return new AssignmentStatement(var, expr);
     }
-    
-    Expr expr() { throw new Todo351Exception(); } // TODO
-    Expr term() { throw new Todo351Exception(); } // TODO
-    Expr factor() { throw new Todo351Exception(); } // TODO
-    VarExpr var() { throw new Todo351Exception(); } // TODO
-    ConstantExpr constant() { throw new Todo351Exception(); } // TODO
-// TODO: 56 lines snipped
-
+    Expr expr() {
+    	Expr expr = term();
+        while(lexer.inspect(OR)){
+            lexer.consume(OR);
+            expr = new OrExpr(expr,term());
+        }
+        return expr;
+    }
+    Expr term() {
+        Expr term = factor();
+        while(lexer.inspect(AND)){
+            lexer.consume(AND);
+            term = new AndExpr(term,factor());
+        }
+        return term;
+    }
+    Expr factor() {
+        if(lexer.inspect(NOT)){
+        	lexer.consume(NOT);
+        	return new NotExpr(factor());
+        }else if(lexer.inspect("(")){
+            lexer.consume("(");
+            Expr value =  expr();
+            lexer.consume(")");
+            return value;
+        }else if(peekConstant()){// we have a constant
+            return constant();
+        }else{
+            return var();
+        }
+    }
+    VarExpr var() { 
+        return new VarExpr(lexer.consumeID());
+    }
+    ConstantExpr constant() {
+        lexer.consume("'");
+        ConstantExpr result = ConstantExpr.make(lexer.consume("0","1"));
+        lexer.consume("'");
+        return result;
+    }
     // helper functions
     private boolean peekConstant() {
         return lexer.inspect("'");

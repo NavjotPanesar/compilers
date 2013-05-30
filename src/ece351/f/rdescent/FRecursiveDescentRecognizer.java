@@ -44,16 +44,16 @@ public final class FRecursiveDescentRecognizer implements VConstants {
     
     void expr() { 
         term();
-        while(lexer.inspect(AND)){
-            lexer.consume(AND);
+        while(lexer.inspect(OR)){
+            lexer.consume(OR);
             term();
         }
     
     }
     void term() {
         factor();
-        while(lexer.inspect(OR)){
-            lexer.consume(OR);
+        while(lexer.inspect(AND)){
+            lexer.consume(AND);
             factor();
         }
     }

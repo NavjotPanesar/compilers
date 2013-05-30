@@ -58,11 +58,9 @@ public final class AssignmentStatement extends Statement implements Examinable {
 		if (obj == null) return false;
 		if (!obj.getClass().equals(this.getClass())) return false;
 		final AssignmentStatement that = (AssignmentStatement) obj;
-		
-		// TODO: compare field values
-		// no significant differences
-// TODO: 5 lines snipped
-throw new ece351.util.Todo351Exception();
+		if(!that.outputVar.isomorphic(this.outputVar)) return false;
+		if(!that.expr.isomorphic(this.expr)) return false;
+		return true;
 	}
 
 	@Override

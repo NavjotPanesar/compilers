@@ -1,2 +1,8 @@
 # Free-form comments on what you thought was interesting, annoying,
 # challenging, etc. We will use these comments to improve the labs.
+
+Lab 3 - Final
+Huge problems merging the dev skeleton.
+Tests were screwed up. Took Siginifant time to fix my git
+Overthought 90% of the questions being asked...
+Not sure how to get past the fact that 95% of the work is done for us...

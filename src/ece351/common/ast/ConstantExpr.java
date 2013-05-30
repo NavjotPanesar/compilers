@@ -61,11 +61,7 @@ public final class ConstantExpr extends Expr {
 		if (obj == null) return false;
 		if (!obj.getClass().equals(this.getClass())) return false;
 		final ConstantExpr that = (ConstantExpr) obj;
-		
-		// compare field values
-		// no significant differences
-// TODO: 4 lines snipped
-throw new ece351.util.Todo351Exception();
+		return this.b.equals(that.b);
 	}
 	
 	@Override
