@@ -23,9 +23,11 @@ public final class TestSimplifier2 {
 		System.out.println("isomorphic? " + isomorphic);
 		final boolean equivalent = simplified.equivalent(simplified2);
 		System.out.println("equivalent? " + equivalent);
+		final boolean idempotent = simplified2.equals(simplified2.simplify());
+		System.out.println("idempotent? " + idempotent);
 		assertTrue(name + " unexpectedly not isomorphic. equivalent? " + equivalent, isomorphic);
-		System.out.println();
-	}
+		assertTrue(name + " reveals that simplify() is not idempotent.", idempotent);System.out.println();
+		}
 	public final static Map<String,FProgram> ORIGINAL;
 	public final static Map<String,FProgram> SIMPLIFIED;
 	static {
