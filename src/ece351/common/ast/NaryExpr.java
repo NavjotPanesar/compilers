@@ -258,15 +258,15 @@ throw new ece351.util.Todo351Exception();
 	 * @param match
 	 * @return
 	 */
-	public final NaryExpr filter(final Class<? extends Expr> cls, final boolean match) {
+	public final NaryExpr filter(final Class<? extends Expr> filter, final boolean shouldMatchFilter) {
 		ImmutableList<Expr> l = ImmutableList.of();
 		for (final Expr child : children) {
-			if (child.getClass().equals(cls)) {
-				if (match) {
+			if (child.getClass().equals(filter)) {
+				if (shouldMatchFilter) {
 					l = l.append(child);
 				}
 			} else {
-				if (!match) {
+				if (!shouldMatchFilter) {
 					l = l.append(child);
 				}
 			}
@@ -274,15 +274,15 @@ throw new ece351.util.Todo351Exception();
 		return newNaryExpr(l);
 	}
 
-	public final NaryExpr filter(final Expr expr, final Examiner examiner, final boolean match) {
+	public final NaryExpr filter(final Expr filter, final Examiner examiner, final boolean shouldMatchFilter) {
 		ImmutableList<Expr> l = ImmutableList.of();
 		for (final Expr child : children) {
-			if (examiner.examine(child, expr)) {
-				if (match) {
+			if (examiner.examine(child, filter)) {
+				if (shouldMatchFilter) {
 					l = l.append(child);
 				}
 			} else {
-				if (!match) {
+				if (!shouldMatchFilter) {
 					l = l.append(child);
 				}
 			}
@@ -290,10 +290,10 @@ throw new ece351.util.Todo351Exception();
 		return newNaryExpr(l);
 	}
 
-	public final NaryExpr removeAll(final List<Expr> exprs, final Examiner examiner) {
+	public final NaryExpr removeAll(final List<Expr> toRemove, final Examiner examiner) {
 		NaryExpr result = this;
-		for (final Expr e : exprs) {
-			result = filter(e, examiner, false);
+		for (final Expr e : toRemove) {
+			result = result.filter(e, examiner, false);
 		}
 		return result;
 	}
