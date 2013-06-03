@@ -17,7 +17,6 @@ public abstract class Expr implements Comparable<Expr>, Examinable {
 	
 	/**
 	 * Default implementation is to do nothing.
-	 * @param opts
 	 * @return this
 	 */
 	protected Expr simplifyOnce() {
@@ -29,23 +28,21 @@ public abstract class Expr implements Comparable<Expr>, Examinable {
 	 * Keep applying the simplify method until no more changes occur.
 	 * In other words, iterate to a fixed point.
 	 * @param e
-	 * @param opts
 	 * @return
 	 */
 	final public Expr simplify() {
 		Expr e = this;
-    	while (true) {
-    		final Expr simplified = e.simplifyOnce();
-    		if (simplified.equals(e)) {
-    			// we're done: nothing changed
-    			return simplified;
-    		} else {
-    			// something changed
-    			// keep working
-    			e = simplified;
-    		}
-    	}
-    }
+		while (true) { // loop forever?
+			final Expr simplified = e.simplifyOnce();
+			if (simplified.equals(e)) {
+				// we're done: nothing changed
+				return simplified;
+			} else {
+				// something changed: keep working
+				e = simplified;
+			}
+		}
+	}
 	
 	public final String nameID(){ return operator() + serialNumber; };
 	public abstract Expr accept(final ExprVisitor exprVisitor);
