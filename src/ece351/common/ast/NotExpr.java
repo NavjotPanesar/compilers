@@ -20,13 +20,10 @@ public final class NotExpr extends UnaryExpr{
     protected final Expr simplifyOnce() {		
     	// simplify our child
     	final Expr localexpr = expr.simplify();
-    			// !true = false
-    			// !false = true
-    		// !!x = x
-    		// nothing changed
-    		// something changed
-// TODO: 19 lines snipped
-throw new ece351.util.Todo351Exception();
+    	if(localexpr.equivalent(ConstantExpr.TrueExpr)) return ConstantExpr.FalseExpr;// !true = false
+    	if(localexpr.equivalent(ConstantExpr.FalseExpr)) return ConstantExpr.TrueExpr;// !false = true
+    	if(NotExpr.class.isInstance(localexpr)) return ((NotExpr)localexpr).expr;// !!x = x
+    	return newUnaryExpr(localexpr);// nothing changed// something changed
     }
 	
     public Expr accept(final ExprVisitor v){
