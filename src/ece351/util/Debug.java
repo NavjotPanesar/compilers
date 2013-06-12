@@ -13,8 +13,12 @@ public final class Debug {
 	public static void msg(final Object s) {
 		if (CommandLine.GLOBAL != null) {
 			if (CommandLine.GLOBAL.debug) {
+				// the user has asked for debug messages
 				System.err.println(s);
 			}
+		} else {
+			// default uninitialized state is to print debug messages
+			System.err.println(s);
 		}
 	}
 	

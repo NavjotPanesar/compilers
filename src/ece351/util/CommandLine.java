@@ -62,7 +62,7 @@ public final class CommandLine {
 		inputSpecs = new ArrayList<String>();
 		boolean h = false;
 		boolean p = false;
-		boolean v = false;
+		boolean v = true; // debug flag is on by default
 		boolean d = false;
 		int o = 1; // Default level for simplifier
 		for (int i = 0; i < args.length; i++) {
@@ -75,8 +75,11 @@ public final class CommandLine {
 			} else if (args[i].startsWith("-p")) { 
 				p = true;
 				continue;
-			} else if (args[i].equals("-v")) {
+			} else if (args[i].equals("-v")) { // turn debug on
 				v = true;
+				continue;
+			} else if (args[i].equals("-v0")) { // turn debug off
+				v = false;
 				continue;
 			} else if (args[i].equals("-d")) {
 				d = true;

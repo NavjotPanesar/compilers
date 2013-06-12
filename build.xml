@@ -36,6 +36,18 @@
     </fileset>
   </path>
 
+  <path id="tests-lab-4">
+    <fileset dir="${build.dir}">
+      <include name="ece351/f/TestSimplifier2.class" />
+    </fileset>
+  </path>
+
+  <path id="tests-lab-5">
+    <fileset dir="${build.dir}">
+      <include name="ece351/w/parboiled/TestWParboiled*" />
+    </fileset>
+  </path>
+
   <target name="compile" description="Compile the source">
     <mkdir dir="${build.dir}" />
     <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="classpath"
@@ -106,6 +118,22 @@
 
   <target name="report-lab-3" depends="compile" description="Report Lab 3">
     <report refid="tests-lab-3" folder="lab-3" />
+  </target>
+
+  <target name="test-lab-4" depends="compile" description="Test Lab 4">
+    <test refid="tests-lab-4" />
+  </target>
+
+  <target name="report-lab-4" depends="compile" description="Report Lab 4">
+    <report refid="tests-lab-4" folder="lab-4" />
+  </target>
+
+  <target name="test-lab-5" depends="compile" description="Test Lab 5">
+    <test refid="tests-lab-5" />
+  </target>
+
+  <target name="report-lab-5" depends="compile" description="Report Lab 5">
+    <report refid="tests-lab-5" folder="lab-5" />
   </target>
 
   <target name="clean" description="Clean up build">
