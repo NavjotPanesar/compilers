@@ -18,11 +18,11 @@ import ece351.w.rdescent.WRecursiveDescentRecognizer;
 
 
 @RunWith(Parameterized.class)
-public final class TestFParboiledRecognizer {
+public final class TestFParboiledRecognizerAccept {
 
 	private final File f;
 
-	public TestFParboiledRecognizer(final File f) {
+	public TestFParboiledRecognizerAccept(final File f) {
 		this.f = f;
 	}
 
