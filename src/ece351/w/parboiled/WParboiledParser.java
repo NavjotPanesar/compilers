@@ -35,30 +35,39 @@ public /*final*/ class WParboiledParser extends BaseParser351 {
 	 */
 	@Override
     public Rule Program() {
+		return Sequence(
+				push(new WProgram()),
+				OneOrMore(Waveform()),EOI);
         		// push empty WProgram
-// TODO: 5 lines snipped
-throw new ece351.util.Todo351Exception();
     }
 
 	/**
 	 * Each line of the input W file represents a "pin" in the circuit.
 	 */
     public Rule Waveform() {
+    	return Sequence(W0(),Name(),push(new Waveform(match())),
+    			W0(),':',W0(),
+    			BitString(),
+    			W0(),';',
+    			W0(),
+    			swap(),
+    			push(((WProgram)pop()).append(
+    					((Waveform)pop())
+    					)
+    					)
+    			);
     			// peek() == [pin name, WProgram]
     			// push empty Waveform with name
     			// peek() = [Waveform, WProgram]
     			// swap, pop, append, push
     			// peek() = [WProgram]
-// TODO: 18 lines snipped
-throw new ece351.util.Todo351Exception();
     }
 
     /**
      * The first token on each line is the name of the pin that line represents.
      */
     public Rule Name() {
-// TODO: 4 lines snipped
-throw new ece351.util.Todo351Exception();
+    	return Sequence(Letter(),ZeroOrMore(FirstOf(Letter(),'_',CharRange('0','9'))));
     }
     
     /**
@@ -66,26 +75,27 @@ throw new ece351.util.Todo351Exception();
      * Recall that PEGs incorporate lexing into the parser.
      */
     public Rule Letter() {
-// TODO: 1 lines snipped
-throw new ece351.util.Todo351Exception();
+    	return FirstOf(CharRange('A','Z'),CharRange('a','z'));
     }
 
     /**
      * A BitString is the sequence of values for a pin.
      */
     public Rule BitString() {
-// TODO: 1 lines snipped
-throw new ece351.util.Todo351Exception();
+    	return OneOrMore(W0(),Bit());
     }
     
     /**
      * A BitString is composed of a sequence of Bits. 
      * Recall that PEGs incorporate lexing into the parser.
      */
-    public Rule Bit() {   
+    public Rule Bit() {
+    	return Sequence(
+    			FirstOf('0','1'),
+    			push(
+    					((Waveform)pop()).append(match())
+    					));
         		// peek() = [Waveform, WProgram]
-// TODO: 5 lines snipped
-throw new ece351.util.Todo351Exception();
     }
 
 }
