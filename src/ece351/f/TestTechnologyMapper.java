@@ -50,9 +50,6 @@ public final class TestTechnologyMapper {
     	System.out.println("simplified:");
     	System.out.println(simplified.toString());
 
-		// check that the two ASTs are NOT isomorphic (the optimization should have done something)
-		assertFalse("ASTs do not differ for " + inputSpec, original.isomorphic(simplified));
-
 		// check examinable sanity
 		ExaminableProperties.checkAllUnary(original);
 		ExaminableProperties.checkAllUnary(simplified);
@@ -78,16 +75,35 @@ public final class TestTechnologyMapper {
 		// Transform the generated .dot graphviz file back to FProgram.
 		final Tuple<FProgram,Integer> t = GraphvizToF.graphvizToF(path);
 		final FProgram fprogramFromGraphviz = t.x.simplify();
-		
-		assertTrue("FProgram do not match!", simplified.equivalent(fprogramFromGraphviz));
+		assertTrue("FProgram to circuit inversion not working", simplified.equivalent(fprogramFromGraphviz));
 
 		// check examinable sanity
 		ExaminableProperties.checkAllUnary(fprogramFromGraphviz);
 		ExaminableProperties.checkAllBinary(original, fprogramFromGraphviz);
 
+		// check against staff output
+		final String staffPath = path.replace("student.out", "staff.out");
+		final Tuple<FProgram,Integer> t2 = GraphvizToF.graphvizToF(staffPath);
+		final FProgram staffGraphF = t2.x.simplify();
+		System.out.println("Staff FProgram from circuit:");
+		System.out.println(staffGraphF);
+		assertTrue("Student soln not equivalent to staff soln", staffGraphF.equivalent(fprogramFromGraphviz));
+	
+		// compare gate count
+		final int gateDiff = t2.y - t.y;
+		score += gateDiff;
+		System.out.println("Staff gates:     " + t2.y);
+		System.out.println("Student gates:   " + t.y);
+		System.out.println("Gate diff:       " + gateDiff);
+		System.out.println("Cumulative diff: " + score);
+		System.out.println("Notes: ");
+		System.out.println("   - 0 is par for the course");
+		System.out.println("   - negative values indicate you used more gates");
+		System.out.println("   - positive values indicate you used fewer gates (i.e., you have a better solution)");
+		System.out.println();
+
 		// success!
-		System.out.println("GATES: " + t.y);
-		System.out.println("so far, so good. still need to compare output to staff output.  " + inputSpec);
 	}
 
+	private int score = 0;
 }
