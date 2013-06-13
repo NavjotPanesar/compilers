@@ -5,21 +5,21 @@ digraph g {
     node [shape="plaintext"];
     edge [arrowhead="diamond"];
     // circuit 
-    var41[label="X"];
-    var47[label="Y"];
-    or57 [label="or57", image="gates/or_noleads.png"];
-    and58 [label="and58", image="gates/and_noleads.png"];
-    and55 [label="and55", image="gates/and_noleads.png"];
-    var49[label="A"];
-    var50[label="B"];
-    var42[label="D"];
-    var48[label="E"];
-    var49 -> or57 ;
-    var50 -> or57 ;
-    or57 -> and55 ;
-    var42 -> and55 ;
-    and55 -> var41 ;
-    or57 -> and58 ;
-    var48 -> and58 ;
-    and58 -> var47 ;
+    and266 [label="and266", image="../../gates/and_noleads.png"];
+    and308 [label="and308", image="../../gates/and_noleads.png"];
+    or257 [label="or257", image="../../gates/or_noleads.png"];
+    var217[label="x"];
+    var218[label="d"];
+    var219[label="a"];
+    var220[label="b"];
+    var223[label="y"];
+    var224[label="e"];
+    var219 -> or257 ;
+    var220 -> or257 ;
+    or257 -> and266 ;
+    var218 -> and266 ;
+    and266 -> var217 ;
+    or257 -> and308 ;
+    var224 -> and308 ;
+    and308 -> var223 ;
 }
