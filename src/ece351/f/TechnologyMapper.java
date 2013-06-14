@@ -88,6 +88,9 @@ public final class TechnologyMapper extends PostOrderFExprVisitor {
 		// build substitutions by determining equivalences of exprs
 		// create nodes for output vars
 		// attach images to gates
+		// ../../gates/not_noleads.png
+		// ../../gates/or_noleads.png
+		// ../../gates/and_noleads.png
 		// compute edges
 		// print nodes
 		// print edges
