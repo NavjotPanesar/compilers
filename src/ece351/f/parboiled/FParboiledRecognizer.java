@@ -19,8 +19,33 @@ public /*final*/ class FParboiledRecognizer extends FBase implements VConstants 
 		
 		// For the grammar production Id, ensure that the Id does not match any of the keywords specified
 		// in the rule, 'Keyword'
-// TODO: 39 lines snipped
-throw new ece351.util.Todo351Exception();
+		return Sequence(OneOrMore(Formula()),EOI);
 	}
+    public Rule Formula() {
+    	return Sequence(Var(),W0(),'<','=',W0(),Expr(),';',W0());
+    }
+
+    public Rule Var() {
+    	return Sequence(Letter(),ZeroOrMore(FirstOf(Letter(),'_',CharRange('0','9'))));
+    }
+    public Rule Letter() {
+    	return FirstOf(CharRange('A','Z'),CharRange('a','z'));
+    }
+    public Rule Expr() {
+    	return Sequence(Term(),W0(),ZeroOrMore(Sequence(W0(),OR,W0(),Term())));
+    }
+    public Rule Term() {
+    	return Sequence(Factor(),W0(),ZeroOrMore(Sequence(W0(),AND,W0(),Factor())));
+    }
+    public Rule Factor() {
+    	return FirstOf(Sequence(NOT,W0(),Factor()),
+    			Sequence('(',W0(),Expr(),W0(),')',W0()),
+    			Var(),
+    			Sequence("' ",Constant(),"' ")
+    			);
+    }
+    public Rule Constant() {
+    	return FirstOf("0 ","1 ");
+    }
 
 }
