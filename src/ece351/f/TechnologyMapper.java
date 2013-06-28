@@ -83,9 +83,30 @@ public final class TechnologyMapper extends PostOrderFExprVisitor {
 	/** Where the real work happens. */
 	public void render(final FProgram program) {
 		header(out);
-		
+
 		// build a set of all of the exprs in the program
+		IdentityHashSet<Expr> exprs = ExtractAllExprs.allExprs(program);
+
 		// build substitutions by determining equivalences of exprs
+		for(Expr current: exprs){
+			if(!substitutions.containsKey(current)){
+				for(Expr compare:exprs){
+					if(compare.equivalent(current)){
+						substitutions.put(compare, current);
+					}
+				}
+				if(current instanceof AndExpr || current instanceof NaryAndExpr){
+					node(current.nameID(),current.nameID(),"../../gates/and_noleads.png");
+				}
+				else if(current instanceof OrExpr || current instanceof NaryOrExpr){
+					node(current.nameID(),current.nameID(),"../../gates/or_noleads.png");
+				}
+				else if(current instanceof NotExpr){
+					node(current.nameID(),current.nameID(),"../../gates/not_noleads.png");
+				}
+			}
+		}
+
 		// create nodes for output vars
 		// attach images to gates
 		// ../../gates/not_noleads.png
@@ -94,8 +115,23 @@ public final class TechnologyMapper extends PostOrderFExprVisitor {
 		// compute edges
 		// print nodes
 		// print edges
-// TODO: 52 lines snipped
-throw new ece351.util.Todo351Exception();
+		for(Expr exp : substitutions.values()){
+			traverse(exp);
+		}
+		for(AssignmentStatement ast : program.formulas){
+			if(substitutions.containsKey(ast.expr)){
+				edge(substitutions.get(ast.expr).nameID(),ast.outputVar.nameID());
+			}else{
+				edge(ast.expr.nameID(),ast.outputVar.nameID());
+			}
+		}
+		for(String nde : nodes){
+			out.println(nde);
+		}
+		for(String edge : edges){
+			out.println(edge);
+		}
+
 		// print footer
 		footer(out);
 		out.flush();
@@ -149,28 +185,32 @@ throw new ece351.util.Todo351Exception();
 
 	@Override
 	public Expr visit(final AndExpr e) {
-// TODO: 3 lines snipped
-throw new ece351.util.Todo351Exception();
-		// return e;
+		edge(e.left,e);
+		edge(e.right,e);
+		return e;
 	}
 
 	@Override
 	public Expr visit(final OrExpr e) {
-// TODO: 3 lines snipped
-throw new ece351.util.Todo351Exception();
-		// return e;
+		edge(e.left,e);
+		edge(e.right,e);
+		return e;
 	}
 	
-	@Override public Expr visit(final NaryAndExpr e) {
-// TODO: 4 lines snipped
-throw new ece351.util.Todo351Exception();
-		// return e;
+	@Override 
+	public Expr visit(final NaryAndExpr e) {
+		for(Expr ec:e.children){
+			edge(ec,e);
+		}
+		return e;
 	}
 
-	@Override public Expr visit(final NaryOrExpr e) { 
-// TODO: 4 lines snipped
-throw new ece351.util.Todo351Exception();
-		// return e;
+	@Override 
+	public Expr visit(final NaryOrExpr e) {
+		for(Expr ec:e.children){
+			edge(ec,e);
+		}
+		return e;
 	}
 
 

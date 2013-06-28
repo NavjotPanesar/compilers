@@ -173,7 +173,6 @@ public abstract class NaryExpr extends Expr {
 			if(!this.children.get(i).equals(that.children.get(i)))return false;
 		}
 		return true;
-		// TODO: 14 lines snipped
 	}
 
 	@Override
@@ -304,7 +303,6 @@ public abstract class NaryExpr extends Expr {
 		}
 		// check if there are any conjunctions that are supersets of others
 		// e.g., ( a . b . c ) + ( a . b ) = a . b
-		// TODO: 30 lines snipped
 		return newNaryExpr(opt_children);
 	}
 
@@ -314,7 +312,6 @@ public abstract class NaryExpr extends Expr {
 		// collapse complements
 		// x op !x = absorbing element
 		// nothing to do, return self
-		// TODO: 24 lines snipped
 		if (this.children.size() == 1) return this.children.get(0);
 		if(this.children.contains(this.getAbsorbingElement())) return this.getAbsorbingElement();
 		return this;
