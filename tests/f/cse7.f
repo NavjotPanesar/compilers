@@ -1,3 +1,3 @@
-X <= A and (B or C);
-Y <= (A and B);
-Z <= (A and C);
+x <= a and (b or c);
+y <= (a and b);
+z <= (a and c);
