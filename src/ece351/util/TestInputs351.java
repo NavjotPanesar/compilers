@@ -26,6 +26,12 @@ public final class TestInputs351 {
 		return oneD2twoD(Utils351.files("tests/f", filter));
 	}
 	
+	public static Collection<Object[]> formulaFiles(String filter1, String filter2) {
+		filter1 = "^" + filter1 + "\\.f$";
+		filter2 = "^" + filter2 + "\\.f$";
+		return oneD2twoD(Utils351.files("tests/f", filter1), Utils351.files("tests/f", filter2));
+	}
+	
 	public static Collection<Object[]> badFormulaFiles() {
 		return oneD2twoD(Utils351.files("tests/f/ungrammatical", "^.*\\.f$"));
 	}
@@ -76,9 +82,17 @@ public final class TestInputs351 {
 	}
 	
 
+	private final static Object[] EMPTY = new Object[0];
 	public static Collection<Object[]> oneD2twoD(final Object[] in) {
-		final Collection<Object[]> out = new ArrayList<Object[]>(in.length);
-		for (final Object obj : in) {
+		return oneD2twoD(in, EMPTY);
+	}
+
+	public static Collection<Object[]> oneD2twoD(final Object[] in1, final Object[] in2) {
+		final Collection<Object[]> out = new ArrayList<Object[]>(in1.length + in2.length);
+		for (final Object obj : in1) {
+			out.add(new Object[] {obj});
+		}
+		for (final Object obj : in2) {
 			out.add(new Object[] {obj});
 		}
 		return out;
