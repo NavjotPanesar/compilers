@@ -52,7 +52,12 @@ public final class TestSimplifierEquivalence {
 		System.out.println("ouput: ");
 		System.out.println(simplified.toString());
 
+		// equivalence
 		assertTrue("simplifier breaks equivalence for " + f.getName(), original.equivalent(simplified));
+		
+		// idempotence
+		final FProgram simplified2 = simplified.simplify();
+		assertTrue("simplifier not idempotent for " + f.getName(), simplified.equals(simplified2));
 		
 		// check examinable sanity
 		ExaminableProperties.checkAllUnary(original);
