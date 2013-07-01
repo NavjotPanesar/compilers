@@ -63,8 +63,8 @@ public class TestSimulatorGenerator {
 			// inconvenient to generate the appropriate wave inputs
 			return;
 		}
-		if (inputSpec.contains("opt4-") || inputSpec.contains("opt5-")) {
-			// these optimizations were optional,
+		if (inputSpec.contains("opt4") || inputSpec.contains("opt5")) {
+			// these optimizations were harder,
 			// so some people might not have done them
 			return;
 		}
@@ -99,7 +99,7 @@ public class TestSimulatorGenerator {
 		final JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
 		assert javac != null : "javac is null, see http://stackoverflow.com/questions/9107099/null-javacompiler-in-eclipse";
 		int compileResult = javac.run(null, null,null, sourcePath);
-		assertTrue("Compile Failed! Why?",compileResult==0);
+		assertTrue("Compile Failed! Why? See prelab exercise.",compileResult==0);
 
 
 		// test the compiled output
@@ -174,7 +174,7 @@ public class TestSimulatorGenerator {
 				.replace(".f", ".wave");
 		assert ((new File(staffWavePath)).exists()) : "staff wave file does not exist: " + staffWavePath;
 
-		sourcePath = inputSpec.replace(s + "f" + s, s + "f" + s + "student.out" + s + "simulator" + s + "Simulator_").replace("-", "_").replace(".f", ".java");
+		sourcePath = inputSpec.replace(s + "f" + s, s + "f" + s + "student.out" + s + "simulator" + s + "Simulator_").replace(".f", ".java");
 		final File f = new File(sourcePath);
 		f.getParentFile().mkdirs();
 
