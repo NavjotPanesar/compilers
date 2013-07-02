@@ -97,9 +97,9 @@ public class TestSimulatorGenerator {
 
 		// compile the generated Java file
 		final JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
-		assert javac != null : "javac is null, see http://stackoverflow.com/questions/9107099/null-javacompiler-in-eclipse";
+		assertTrue("Could not get programmatic access to javac compiler, see lab manual section 0", javac != null);
 		int compileResult = javac.run(null, null,null, sourcePath);
-		assertTrue("Compile Failed! Why? See prelab exercise.",compileResult==0);
+		assertTrue("Compilation of generated Java program failed.", compileResult==0);
 
 
 		// test the compiled output
