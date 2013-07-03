@@ -48,6 +48,14 @@
     </fileset>
   </path>
 
+  <path id="tests-lab-6">
+    <fileset dir="${build.dir}">
+      <include name="ece351/f/parboiled/TestFParboiledRecognizer*" />
+      <include name="ece351/f/parboiled/TestFParboiledParser*" />
+      <include name="ece351/f/parboiled/TestFParserComparison.class" />
+    </fileset>
+  </path>
+
   <path id="tests-lab-7">
     <fileset dir="${build.dir}">
       <include name="ece351/f/TestTechnologyMapper.class" />
@@ -146,6 +154,14 @@
 
   <target name="report-lab-5" depends="compile" description="Report Lab 5">
     <report refid="tests-lab-5" folder="lab-5" />
+  </target>
+
+  <target name="test-lab-6" depends="compile" description="Test Lab 6">
+    <test refid="tests-lab-6" />
+  </target>
+
+  <target name="report-lab-6" depends="compile" description="Report Lab 6">
+    <report refid="tests-lab-6" folder="lab-6" />
   </target>
 
   <target name="test-lab-7" depends="compile" description="Test Lab 7">
