@@ -45,7 +45,7 @@ public final class AlloyConverter extends FExprVisitor {
 		final int inputVarSize1 = inputVars.size()-1;
 		int counter = 0;
 		for (final String v : inputVars) {
-			m.append(v);
+			m.append(sanitize(v));
 			if (counter < inputVarSize1) {
 				m.append(", ");
 				counter++;
@@ -66,9 +66,9 @@ public final class AlloyConverter extends FExprVisitor {
 		m.append(linesep);
 		for (final AssignmentStatement a : fp1.formulas) {
 			m.append("    ");
-			m.append(a.outputVar);
+			m.append(sanitize(a.outputVar));
 			m.append("1 <=> ");
-			m.append(a.outputVar);
+			m.append(sanitize(a.outputVar));
 			m.append("2");
 			m.append(linesep);
 		}
@@ -81,10 +81,18 @@ public final class AlloyConverter extends FExprVisitor {
 		return m.toString();
 	}
 
+	private static String sanitize(final VarExpr v) {
+		return sanitize(v.identifier);
+	}
+
+	private static String sanitize(final String varName) {
+		return "_" + varName;
+	}
+	
 	private static void pred(final FProgram fp, final StringBuilder m, final String suffix) {
 		for (final AssignmentStatement a : fp.formulas) {
 			m.append("pred ");
-			m.append(a.outputVar);
+			m.append(sanitize(a.outputVar));
 			m.append(suffix);
 			m.append("[] {");
 			m.append((new AlloyConverter(a.expr)).toString());
@@ -111,7 +119,7 @@ public final class AlloyConverter extends FExprVisitor {
 	@Override
 	public Expr visit(final VarExpr e) {
 		b.append(" (some ");
-		b.append(e.identifier);
+		b.append(sanitize(e.identifier));
 		b.append(".v) ");
 		return e;
 	}

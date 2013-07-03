@@ -1,2 +1,2 @@
-X <= not A or not B;
-Y <= not (A and B);
+x <= not a or not b;
+y <= not (a and b);

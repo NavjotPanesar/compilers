@@ -108,5 +108,11 @@ public final class TestTechnologyMapper {
 		// success!
 	}
 
-	private int score = 0;
+	/** 
+	 * The cumulative score.
+	 * Needs to be static to maintain the cumulative score across multiple
+	 * instances of TestTechnologyMapper. JUnit creates one instance of 
+	 * TestTechnologyMapper for each test input file.
+	 */
+	private static int score = 0;
 }

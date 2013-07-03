@@ -33,6 +33,7 @@ public final class Utils351 {
 				final BufferedReader br = new BufferedReader(fr);
 				final char[] c = new char[(int)length];
 				br.read(c);
+				br.close();
 				return new String(c);
 			} else {
 				throw new RuntimeException("File is too big! " + inputFileName);
