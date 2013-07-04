@@ -57,54 +57,7 @@ public final class SimulatorGenerator extends PreOrderFExprVisitor {
 		indent = indent.substring(0, indent.length() - 4);
 	}
 	
-	public void generate(final String fName, final FProgram program, final PrintWriter out) {
-		this.out = out;
-		final String cleanFName = fName.replace('-', '_');
-		
-		// header
-		println("import java.util.*;");
-		println("import ece351.w.ast.*;");
-		println("import ece351.w.parboiled.*;");
-		println("import static ece351.util.Boolean351.*;");
-		println("import ece351.util.CommandLine;");
-		println("import java.io.File;");
-		println("import java.io.FileWriter;");
-		println("import java.io.StringWriter;");
-		println("import java.io.PrintWriter;");
-		println("import java.io.IOException;");
-		println("import ece351.util.Debug;");
-		println();
-		println("public final class Simulator_" + cleanFName + " {");
-		indent();
-		println("public static void main(final String[] args) {");
-		indent();
-		
-		println("// read the input F program");
-		println("// write the output");
-		println("// read input WProgram");
-		println("// construct storage for output");
-		println("// loop over each time step");
-		println("// values of input variables at this time step");
-		println("// values of output variables at this time step");
-		println("// store outputs");
-		// end the time step loop
-		// boilerplate
-		println("// write the input");
-		println("// write the output");
-// TODO: 58 lines snipped
-throw new ece351.util.Todo351Exception();
-		// end main method
-		outdent();
-		println("}");
-		
-		println("// methods to compute values for output pins");
-// TODO: 10 lines snipped
-throw new ece351.util.Todo351Exception();
-		// end class
-		outdent();
-		println("}");
-
-	}
+	
 
 	@Override
 	public Expr traverse(final NaryExpr e) {
@@ -179,7 +132,102 @@ throw new ece351.util.Todo351Exception();
 		return e; 
 	}
 	
-	
+	public void generate(final String fName, final FProgram program, final PrintWriter out) {
+		this.out = out;
+		final String cleanFName = fName.replace('-', '_');
+		
+		// header
+		println("import java.util.*;");
+		println("import ece351.w.ast.*;");
+		println("import ece351.w.parboiled.*;");
+		println("import static ece351.util.Boolean351.*;");
+		println("import ece351.util.CommandLine;");
+		println("import java.io.File;");
+		println("import java.io.FileWriter;");
+		println("import java.io.StringWriter;");
+		println("import java.io.PrintWriter;");
+		println("import java.io.IOException;");
+		println("import ece351.util.Debug;");
+		println();
+		println("public final class Simulator_" + cleanFName + " {");
+		indent();
+		println("public static void main(final String[] args) {");
+		indent();
+		println("final String s = File.separator;");
+		println("final CommandLine cmd = new CommandLine(args);");
+		println("final String input = cmd.readInputSpec();");
+		println("final WProgram wprogram = WParboiledParser.parse(input);");
+		println("final Map<String,StringBuilder> output = new LinkedHashMap<String,StringBuilder>();");
+		println("// read the input F program");
+		
+		
+		for(AssignmentStatement ast : program.formulas){
+			println("output.put(\""+ast.outputVar+"\",new StringBuilder());");
+		}
+		
+		println("// write the output");
+		println("// read input WProgram");
+		println("// construct storage for output");
+		println("// loop over each time step");
+		println("// values of input variables at this time step");
+		println("// values of output variables at this time step");
+		println("// store outputs");
+		
+		println("final int timeCount = wprogram.timeCount();");
+		println("for (int time = 0; time < timeCount; time++) {");
+		indent();
+		for(String var : DetermineInputVars.inputVars(program)){
+			println("final boolean in_"+var+" = wprogram.valueAtTime(\""+var+"\",time);");
+		}
+		for(AssignmentStatement ast : program.formulas){
+			println("final String out_"+ast.outputVar+" = "+generateCall(ast)+" ? \"1 \" : \"0 \";");
+			println("output.get(\""+ast.outputVar+"\").append(out_"+ast.outputVar+");");
+		}
+		outdent();
+		// end the time step loop
+		println("}");
+
+		// boilerplate
+		println("try {");
+		indent();
+		println("final File f = cmd.getOutputFile();");
+		println("f.getParentFile().mkdirs();");
+		println("final PrintWriter pw = new PrintWriter(new FileWriter(f));");
+	// write the input
+		println("System.out.println(wprogram.toString());");
+		println("pw.println(wprogram.toString());");
+		// write the output
+		println("System.out.println(f.getAbsolutePath());");
+		println("for (final Map.Entry<String,StringBuilder> e : output.entrySet()) {");
+		indent();
+		println("System.out.println(e.getKey() + \":\" + e.getValue().toString()+ \";\");");
+		println("pw.write(e.getKey() + \":\" + e.getValue().toString()+ \";\\n\");");
+		outdent();
+		println("}");
+		println("pw.close();");
+		outdent();
+		println("} catch (final IOException e) {");
+		indent();
+		println("Debug.barf(e.getMessage());");
+		outdent();
+		println("}");
+		// end main method
+		outdent();
+		println("}");
+		
+		println("// methods to compute values for output pins");
+		for(AssignmentStatement ast : program.formulas){
+			print(indent);
+			print(this.generateSignature(ast)+"{ return ");
+			traverse(ast.expr);
+			print("; }");
+			println();
+		}
+		// end class
+		outdent();
+		println("}");
+
+	}
 	public String generateSignature(final AssignmentStatement f) {
 		return generateList(f, true);
 	}
@@ -196,8 +244,21 @@ throw new ece351.util.Todo351Exception();
 		b.append(f.outputVar);
 		b.append("(");
 		// loop over f's input variables
-// TODO: 17 lines snipped
-throw new ece351.util.Todo351Exception();
+		Set<String> vars = DetermineInputVars.inputVars(f);
+		int i = vars.size();
+		for(String var : vars){
+			i -=1;
+			if(signature){
+				b.append("final boolean ");
+			}
+			if(!signature){
+				b.append("in_");
+			}
+			b.append(var);
+			if(i != 0){
+				b.append(", ");
+			}
+		}
 		b.append(")");
 		return b.toString();
 	}

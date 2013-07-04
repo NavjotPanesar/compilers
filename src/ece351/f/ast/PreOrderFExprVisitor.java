@@ -9,19 +9,25 @@ public abstract class PreOrderFExprVisitor extends FExprVisitor {
 
 	@Override
 	public Expr traverse(final NaryExpr e) {
-// TODO: 5 lines snipped
-throw new ece351.util.Todo351Exception();
+		e.accept(this);
+		for (final Expr c : e.children) {
+			traverse(c);
+		}
+		return e;
 	}
 
 	@Override
 	public Expr traverse(final BinaryExpr b) {
-// TODO: 4 lines snipped
-throw new ece351.util.Todo351Exception();
+		b.accept(this);
+		traverse(b.left);
+		traverse(b.right);
+		return b;
 	}
 
 	@Override
 	public Expr traverse(final UnaryExpr u) {
-// TODO: 3 lines snipped
-throw new ece351.util.Todo351Exception();
+		u.accept(this);
+		traverse(u.expr);
+		return u;
 	}
 }
