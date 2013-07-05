@@ -1,0 +1,10 @@
+Setup
+- Configure Eclipse to use 32-bit JDK (see prelab for instructions)
+- Install MASM32 on Windows (ideally to the default C:\masm32).
+- Add C:\masm32\bin to your system path environment variable
+- Open a new command line window (to refresh path) and type "ML.EXE". It should output "Microsoft (R) Macro Assembler Version 6.14.8444...". If not, then the evnironment variable was not set correctly.
+
+Tips:
+- To see the JNI signatures uncomment the code for "javah" in TestSimulatorGeneratorMasm32.java; this will cause the C header to be generated. You will need to change the JDK path
+- If the batch file fails, check to see if MASM32 is on the system path and whether the directories in the batch file are correct.
+- Most of the Lab 8 code can be copied and pasted; the only difference is that for the methods, only the signature should be generated.
