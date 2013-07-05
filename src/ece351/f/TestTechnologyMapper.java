@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import ece351.TestPrelab;
 import ece351.f.ast.FProgram;
 import ece351.util.CommandLine;
 import ece351.util.ExaminableProperties;
@@ -37,6 +38,8 @@ public final class TestTechnologyMapper {
 
 	@Test
 	public void mapper() throws IOException {
+		assertTrue(TestPrelab.areAssertionsEnabled());
+
 		final String inputSpec = f.getAbsolutePath();
 		final CommandLine c = new CommandLine("-p", "-o4", inputSpec);
 		final String input = c.readInputSpec();
@@ -105,5 +108,11 @@ public final class TestTechnologyMapper {
 		// success!
 	}
 
-	private int score = 0;
+	/** 
+	 * The cumulative score.
+	 * Needs to be static to maintain the cumulative score across multiple
+	 * instances of TestTechnologyMapper. JUnit creates one instance of 
+	 * TestTechnologyMapper for each test input file.
+	 */
+	private static int score = 0;
 }

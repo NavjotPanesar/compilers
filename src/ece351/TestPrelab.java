@@ -18,8 +18,14 @@ public class TestPrelab {
 	@Test
 	public void testJUnitConfiguration() {
 		boolean x = false;
-		assert x=true : "this will always succeed";
+		assert x=true : "the assignment will always succeed, but will only be executed if assertions are enabled";
 		assertTrue("JUnit not adding -ea to the VM arguments for new launch configurations", x);
+	}
+	
+	public static boolean areAssertionsEnabled() {
+		boolean x = false;
+		assert x=true : "the assignment will always succeed, but will only be executed if assertions are enabled";
+		return x;
 	}
 
 	@Test

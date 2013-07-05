@@ -48,6 +48,26 @@
     </fileset>
   </path>
 
+  <path id="tests-lab-6">
+    <fileset dir="${build.dir}">
+      <include name="ece351/f/parboiled/TestFParboiledRecognizer*" />
+      <include name="ece351/f/parboiled/TestFParboiledParser*" />
+      <include name="ece351/f/parboiled/TestFParserComparison.class" />
+    </fileset>
+  </path>
+
+  <path id="tests-lab-7">
+    <fileset dir="${build.dir}">
+      <include name="ece351/f/TestTechnologyMapper.class" />
+    </fileset>
+  </path>
+
+  <path id="tests-lab-8">
+    <fileset dir="${build.dir}">
+      <include name="ece351/f/TestSimulatorGenerator.class" />
+    </fileset>
+  </path>
+
   <target name="compile" description="Compile the source">
     <mkdir dir="${build.dir}" />
     <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="classpath"
@@ -59,7 +79,7 @@
   <macrodef name="test">
     <attribute name="refid" />
     <sequential>
-      <junit fork="yes" timeout="5000">
+      <junit fork="yes" timeout="10000">
         <jvmarg value="-ea" />
         <classpath>
           <path refid="classpath" />
@@ -134,6 +154,30 @@
 
   <target name="report-lab-5" depends="compile" description="Report Lab 5">
     <report refid="tests-lab-5" folder="lab-5" />
+  </target>
+
+  <target name="test-lab-6" depends="compile" description="Test Lab 6">
+    <test refid="tests-lab-6" />
+  </target>
+
+  <target name="report-lab-6" depends="compile" description="Report Lab 6">
+    <report refid="tests-lab-6" folder="lab-6" />
+  </target>
+
+  <target name="test-lab-7" depends="compile" description="Test Lab 7">
+    <test refid="tests-lab-7" />
+  </target>
+
+  <target name="report-lab-7" depends="compile" description="Report Lab 7">
+    <report refid="tests-lab-7" folder="lab-7" />
+  </target>
+
+  <target name="test-lab-8" depends="compile" description="Test Lab 8">
+    <test refid="tests-lab-8" />
+  </target>
+
+  <target name="report-lab-8" depends="compile" description="Report Lab 8">
+    <report refid="tests-lab-8" folder="lab-8" />
   </target>
 
   <target name="clean" description="Clean up build">
