@@ -21,40 +21,40 @@ abstract class VBase extends BaseParser351 implements VConstants {
     // than just using the rule, WhiteSpace, or adding a space at the end of each keyword literal
     
     // Boolean Operators
-    Rule NOT()  { return Sequence(IgnoreCase(NOT), Test(AnyOf("( \t\n\r\f")), W0()); }
-    Rule AND()  { return Sequence(IgnoreCase(AND), Test(AnyOf("( \t\n\r\f")), W0()); }
-    Rule OR()   { return Sequence(IgnoreCase(OR),  Test(AnyOf("( \t\n\r\f")), W0()); }
-    Rule XOR()  { return Sequence(IgnoreCase(XOR), Test(AnyOf("( \t\n\r\f")), W0()); }
-    Rule NAND() { return Sequence(IgnoreCase(NAND),Test(AnyOf("( \t\n\r\f")), W0()); }
-    Rule NOR()  { return Sequence(IgnoreCase(NOR), Test(AnyOf("( \t\n\r\f")), W0()); }
-    Rule XNOR() { return Sequence(IgnoreCase(XNOR),Test(AnyOf("( \t\n\r\f")), W0()); }
+    Rule NOT()  { return Sequence(IgnoreCase(NOT), Test(AnyOf("( \t\n\r\f"))); }
+    Rule AND()  { return Sequence(IgnoreCase(AND), Test(AnyOf("( \t\n\r\f"))); }
+    Rule OR()   { return Sequence(IgnoreCase(OR),  Test(AnyOf("( \t\n\r\f"))); }
+    Rule XOR()  { return Sequence(IgnoreCase(XOR), Test(AnyOf("( \t\n\r\f"))); }
+    Rule NAND() { return Sequence(IgnoreCase(NAND),Test(AnyOf("( \t\n\r\f"))); }
+    Rule NOR()  { return Sequence(IgnoreCase(NOR), Test(AnyOf("( \t\n\r\f"))); }
+    Rule XNOR() { return Sequence(IgnoreCase(XNOR),Test(AnyOf("( \t\n\r\f"))); }
     
     // Constructs
-    Rule IF()    { return Sequence(IgnoreCase("if"),   Test(AnyOf("( \t\n\r\f")), W0()); }
-    Rule THEN()  { return Sequence(IgnoreCase("then"), Test(AnyOf(" \t\n\r\f")), W0()); }
-    Rule ELSE()  { return Sequence(IgnoreCase("else"), Test(AnyOf(" \t\n\r\f")), W0()); }
-    Rule ENDIF() { return Sequence(IgnoreCase("end"),  W(), IgnoreCase("if"), Test(AnyOf("; \t\n\r\f")), W0()); }
+    Rule IF()    { return Sequence(IgnoreCase("if"),   Test(AnyOf("( \t\n\r\f"))); }
+    Rule THEN()  { return Sequence(IgnoreCase("then"), Test(AnyOf(" \t\n\r\f"))); }
+    Rule ELSE()  { return Sequence(IgnoreCase("else"), Test(AnyOf(" \t\n\r\f"))); }
+    Rule ENDIF() { return Sequence(IgnoreCase("end"),  W(), IgnoreCase("if"), Test(AnyOf("; \t\n\r\f"))); }
     
-    Rule PROCESS()    { return Sequence(IgnoreCase("process"), W0()); }
-    Rule ENDPROCESS() { return Sequence(IgnoreCase("end"), W(), IgnoreCase("process"), Test(AnyOf("; \t\n\r\f")), W0()); }
+    Rule PROCESS()    { return IgnoreCase("process"); }
+    Rule ENDPROCESS() { return Sequence(IgnoreCase("end"), W(), IgnoreCase("process"), Test(AnyOf("; \t\n\r\f"))); }
     
     // Misc
     Rule LIBRARY()		{ return Sequence(IgnoreCase("library"),      W()); }
     Rule USE()			{ return Sequence(IgnoreCase("use"),          W()); }
-    Rule ENTITY()		{ return Sequence(IgnoreCase("entity"),Test(AnyOf("; \t\n\r\f")), W0()); }
-    Rule PORT()			{ return Sequence(IgnoreCase("port"),  Test(AnyOf("( \t\n\r\f")), W0()); }
-    Rule MAP()			{ return Sequence(IgnoreCase("map"),   Test(AnyOf("( \t\n\r\f")), W0()); }
-    Rule ARCHITECTURE() { return Sequence(IgnoreCase("architecture"), W()); }
+    Rule ENTITY()		{ return Sequence(IgnoreCase("entity"),Test(AnyOf("; \t\n\r\f"))); }
+    Rule PORT()			{ return Sequence(IgnoreCase("port"),  Test(AnyOf("( \t\n\r\f"))); }
+    Rule MAP()			{ return Sequence(IgnoreCase("map"),   Test(AnyOf("( \t\n\r\f"))); }
+    Rule ARCHITECTURE() { return IgnoreCase("architecture"); }
     
-    Rule OF()			{ return Sequence(IgnoreCase("of"), W());}
-    Rule IS()			{ return Sequence(IgnoreCase("is"), W());}
-    Rule BEGIN()		{ return Sequence(IgnoreCase("begin"), W());}
-    Rule END()			{ return Sequence(IgnoreCase("end"), Test(AnyOf("; \t\n\r\f")), W0()); }
+    Rule OF()			{ return IgnoreCase("of");}
+    Rule IS()			{ return IgnoreCase("is");}
+    Rule BEGIN()		{ return IgnoreCase("begin");}
+    Rule END()			{ return Sequence(IgnoreCase("end"), Test(AnyOf("; \t\n\r\f"))); }
     
-    Rule SIGNAL()		{ return Sequence(IgnoreCase("signal"), W()); }
-    Rule BIT()			{ return Sequence(IgnoreCase("bit"),    W0()); }
-    Rule IN()			{ return Sequence(IgnoreCase("in"),  W()); }
-    Rule OUT()			{ return Sequence(IgnoreCase("out"), W()); }
+    Rule SIGNAL()		{ return IgnoreCase("signal"); }
+    Rule BIT()			{ return IgnoreCase("bit"); }
+    Rule IN()			{ return IgnoreCase("in"); }
+    Rule OUT()			{ return IgnoreCase("out"); }
     
     
     @MemoMismatches
