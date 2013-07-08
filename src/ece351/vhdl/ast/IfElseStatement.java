@@ -33,6 +33,14 @@ public final class IfElseStatement extends Statement implements Examinable {
 		return new IfElseStatement(elseBody.append(s), ifBody, condition);
 	}
 
+	public IfElseStatement setTrueBlock(final ImmutableList<AssignmentStatement> list) {
+		return new IfElseStatement(elseBody, list, condition);
+	}
+	
+	public IfElseStatement setElseBlock(final ImmutableList<AssignmentStatement> list) {
+		return new IfElseStatement(list, ifBody, condition);
+	}
+	
 	@Override
 	public String toString() {
 		final StringBuilder output = new StringBuilder();

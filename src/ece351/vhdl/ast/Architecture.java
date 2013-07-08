@@ -47,6 +47,21 @@ public final class Architecture implements Examinable {
 				entityName, architectureName);
 	}
 
+	public Architecture setSignals(final ImmutableList<String> list) {
+		return new Architecture(statements, components, list,
+				entityName, architectureName);
+	}
+	
+	public Architecture setComponents(final ImmutableList<Component> list) {
+		return new Architecture(statements, list, signals,
+				entityName, architectureName);
+	}
+	
+	public Architecture setStatements(final ImmutableList<Statement> list) {
+		return new Architecture(list, components, signals,
+				entityName, architectureName);
+	}
+	
 	@Override
 	public String toString() {
 		final StringBuilder output = new StringBuilder();

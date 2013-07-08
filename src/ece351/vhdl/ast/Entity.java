@@ -30,6 +30,14 @@ public final class Entity implements Examinable {
 		return new Entity(output.append(o), input, identifier);
 	}
 	
+	public Entity setInput(final ImmutableList<String> list) {
+		return new Entity(output, list, identifier);
+	}
+	
+	public Entity setOutput(final ImmutableList<String> list) {
+		return new Entity(list, input, identifier);
+	}
+	
     @Override
     public String toString() {
     	final String inputBits = Utils351.bitListToString(input);

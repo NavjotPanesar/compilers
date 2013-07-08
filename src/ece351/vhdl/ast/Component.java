@@ -30,6 +30,10 @@ public final class Component implements Examinable {
 		return new Component(signalList.append(signal), entityName, instanceName);
 	}
 	
+	public Component setSignals(final ImmutableList<String> list) {
+		return new Component(list, entityName, instanceName);
+	}
+	
     @Override
     public String toString() {
         return instanceName + " : entity work." + entityName + " port map( " + Utils351.bitListToString(signalList) + ");";

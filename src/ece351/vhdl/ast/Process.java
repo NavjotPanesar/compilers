@@ -28,6 +28,14 @@ public final class Process extends Statement implements Examinable {
 	public Process appendStatement(final Statement s) {
 		return new Process(sequentialStatements.append(s), sensitivityList);
 	}
+
+	public Process setSensitivityList(final ImmutableList<String> list) {
+		return new Process(sequentialStatements, list);
+	}
+	
+	public Process setStatements(final ImmutableList<Statement> list) {
+		return new Process(list, sensitivityList);
+	}
 	
     @Override
     public String toString() {

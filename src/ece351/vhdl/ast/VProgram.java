@@ -1,8 +1,6 @@
 package ece351.vhdl.ast;
 import org.parboiled.common.ImmutableList;
 
-import ece351.common.ast.AssignmentStatement;
-import ece351.f.ast.FProgram;
 import ece351.util.Examinable;
 import ece351.util.Examiner;
 
@@ -25,6 +23,9 @@ public final class VProgram implements Examinable {
 		return new VProgram(designUnits.append(d));
 	}
 	
+	public VProgram setDesignUnits(final ImmutableList<DesignUnit> list) {
+		return new VProgram(list);
+	}
 
     @Override
     public String toString() {
