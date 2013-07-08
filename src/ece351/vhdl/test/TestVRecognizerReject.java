@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import ece351.util.CommandLine;
 import ece351.util.TestInputs351;
 import ece351.vhdl.VRecognizer;
 
@@ -30,6 +31,9 @@ public class TestVRecognizerReject {
 	@Test
 	public void accept() {
 		final String inputSpec = f.getAbsolutePath();
+		System.out.println("reading: " + inputSpec);
+		final CommandLine c = new CommandLine(inputSpec);
+		System.out.println(c.readInputSpec());
 		try {
 			VRecognizer.main(inputSpec);
 			fail("should have rejected but didn't:  " + inputSpec);
