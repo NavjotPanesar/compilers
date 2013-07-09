@@ -71,18 +71,18 @@ public final class Architecture implements Examinable {
 		output.append(entityName);
 		output.append(" is\n");
 		if (signals.size() > 0) {
-			output.append("\tsignal ");
+			output.append("    signal ");
 			output.append(Utils351.bitListToString(signals));
 			output.append(" : bit;");
 		}
 		output.append("\nbegin\n");
 		for (Component c : components) {
-			output.append("\t");
+			output.append("    ");
 			output.append(c);
 			output.append("\n");
 		}
 		for (Statement stmt : statements) {
-			output.append("\t");
+			output.append("    ");
 			output.append(stmt);
 		}
 		output.append("end ");

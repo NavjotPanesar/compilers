@@ -43,8 +43,8 @@ public final class Entity implements Examinable {
     	final String inputBits = Utils351.bitListToString(input);
     	final String outputBits = Utils351.bitListToString(output);
         return "entity " + identifier + " is port(\n" 
-                + ((inputBits.length() > 0) ? "\t" + inputBits + " : in bit;\n" : "") 
-                + ((outputBits.length() > 0) ? "\t" + outputBits + " : out bit\n" : "") 
+                + ((inputBits.length() > 0) ? "    " + inputBits + " : in bit;\n" : "")
+                + ((outputBits.length() > 0) ? "    " + outputBits + " : out bit\n" : "")
                 + ");\nend " + identifier + ";";
     }
 

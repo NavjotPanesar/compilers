@@ -42,12 +42,14 @@ public final class Process extends Statement implements Examinable {
     	final StringBuilder output = new StringBuilder();
     	output.append("process ( ");
     	output.append(Utils351.bitListToString(sensitivityList));
-    	output.append(" ) \n\t\tbegin\n");
+        output.append(" ) \n        begin\n");
     	for (Statement stmt : sequentialStatements) {
-    		if (stmt instanceof AssignmentStatement) output.append("\t\t\t");
-    		output.append(stmt);
+            if (stmt instanceof AssignmentStatement) {
+                output.append("            ");
+            }
+            output.append(stmt);
     	}
-    	output.append("\t\tend process;\n");
+        output.append("        end process;\n");
     	return output.toString();
     }
 

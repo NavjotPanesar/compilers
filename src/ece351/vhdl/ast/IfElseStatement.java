@@ -44,19 +44,19 @@ public final class IfElseStatement extends Statement implements Examinable {
 	@Override
 	public String toString() {
 		final StringBuilder output = new StringBuilder();
-		output.append("\t\t\tif ( ");
+		output.append("            if ( ");
 		output.append(condition);
 		output.append(" ) then\n");
 		for (AssignmentStatement stmt : ifBody) {
-			output.append("\t\t\t\t");
+			output.append("                ");
 			output.append(stmt);
 		}
-		output.append("\t\t\telse\n");
+		output.append("            else\n");
 		for (AssignmentStatement stmt : elseBody) {
-			output.append("\t\t\t\t");
+			output.append("                ");
 			output.append(stmt);
 		}
-		output.append("\t\t\tend if;\n");
+		output.append("            end if;\n");
 		return output.toString();
 	}
 
