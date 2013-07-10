@@ -25,6 +25,20 @@ public final class IfElseStatement extends Statement implements Examinable {
 		this.ifBody = ifBody;
 	}
 
+	public boolean repOk() {
+		assert condition != null;
+		assert ifBody != null;
+		assert elseBody != null;
+		assert condition.repOk();
+		for (final AssignmentStatement a : ifBody) {
+			assert a.repOk();
+		}
+		for (final AssignmentStatement a : elseBody) {
+			assert a.repOk();
+		}
+		return true;
+	}
+
 	public IfElseStatement appendToTrueBlock(final AssignmentStatement s) {
 		return new IfElseStatement(elseBody, ifBody.append(s), condition);
 	}

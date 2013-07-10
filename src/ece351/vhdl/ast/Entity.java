@@ -10,11 +10,13 @@ public final class Entity implements Examinable {
 	public final String identifier;
 	public final ImmutableList<String> input;
 	public final ImmutableList<String> output;
+	
 	public Entity(final String id) {
 		this.identifier = id;
 		this.input = ImmutableList.of();
 		this.output = ImmutableList.of();
 	}
+	
 	public Entity(final ImmutableList<String> out,
 			final ImmutableList<String> in, final String id) {
 		this.identifier = id;
@@ -22,6 +24,13 @@ public final class Entity implements Examinable {
 		this.output = out;
 	}
 	
+	public boolean repOk() {
+		assert identifier != null;
+		assert input != null;
+		assert output != null;
+		return true;
+	}
+
 	public Entity appendInput(final String i) {
 		return new Entity(output, input.append(i), identifier);
 	}

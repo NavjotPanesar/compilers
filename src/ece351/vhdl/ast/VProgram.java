@@ -14,10 +14,18 @@ public final class VProgram implements Examinable {
 	public VProgram() {
 		this.designUnits = ImmutableList.of();
 	}
+	
 	public VProgram(final ImmutableList<DesignUnit> designUnits) {
 		this.designUnits = designUnits;
 	}
 
+	public boolean repOk() {
+		assert designUnits != null;
+		for (final DesignUnit du : designUnits) {
+			assert du.repOk();
+		}
+		return true;
+	}
 
 	public VProgram append(final DesignUnit d) {
 		return new VProgram(designUnits.append(d));
@@ -73,4 +81,5 @@ public final class VProgram implements Examinable {
 	public boolean equivalent(final Examinable obj) {
 		return isomorphic(obj);
 	}
+	
 }

@@ -10,15 +10,26 @@ import ece351.util.Utils351;
 public final class Process extends Statement implements Examinable {
 	public final ImmutableList<String> sensitivityList;
 	public final ImmutableList<Statement> sequentialStatements;
+
 	public Process() {
 		this.sensitivityList = ImmutableList.of();
 		this.sequentialStatements = ImmutableList.of();
 	}
+	
 	public Process(
 			final ImmutableList<Statement> statements,
 			final ImmutableList<String> sensitivityList) {
 		this.sensitivityList = sensitivityList;
 		this.sequentialStatements = statements;
+	}
+	
+	public boolean repOk() {
+		assert sensitivityList != null;
+		assert sequentialStatements != null;
+		for (final Statement s : sequentialStatements) {
+			assert s.repOk();
+		}
+		return true;
 	}
 	
 	public Process appendSensitivity(final String s) {

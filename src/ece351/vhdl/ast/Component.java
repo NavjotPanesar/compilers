@@ -69,5 +69,12 @@ public final class Component implements Examinable {
 	public boolean equivalent(final Examinable obj) {
 		return isomorphic(obj);
 	}
+	
+	public boolean repOk() {
+		assert entityName != null;
+		assert instanceName != null;
+		assert signalList != null;
+		return true;
+	}
 
 }

@@ -147,4 +147,19 @@ public final class Architecture implements Examinable {
 		return isomorphic(obj);
 	}
 
+	public boolean repOk() {
+		assert architectureName != null;
+		assert entityName != null;
+		assert signals != null;
+		assert components != null;
+		assert statements != null;
+		for (final Component c : components) {
+			assert c.repOk();
+		}
+		for (final Statement s : statements) {
+			assert s.repOk();
+		}
+		return true;
+	}
+
 }

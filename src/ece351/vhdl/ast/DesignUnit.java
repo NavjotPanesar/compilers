@@ -15,6 +15,14 @@ public final class DesignUnit implements Examinable {
 		this.identifier = entity.identifier;
 	}
 
+	public DesignUnit setArchitecture(final Architecture arch2) {
+		return new DesignUnit(arch2, entity);
+	}
+
+	public DesignUnit setEntity(final Entity entity2) {
+		return new DesignUnit(arch, entity2);
+	}
+	
 	@Override
 	public String toString() {
 		return this.entity + "\n" + this.arch + "\n";
@@ -60,6 +68,16 @@ public final class DesignUnit implements Examinable {
 	@Override
 	public boolean equivalent(final Examinable obj) {
 		return isomorphic(obj);
+	}
+
+	public boolean repOk() {
+		assert arch != null;
+		assert entity != null;
+		assert identifier != null;
+		assert identifier.equals(entity.identifier);
+		assert arch.repOk();
+		assert entity.repOk();
+		return true;
 	}
 
 }
