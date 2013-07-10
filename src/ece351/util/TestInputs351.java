@@ -62,7 +62,7 @@ public final class TestInputs351 {
 	}
 	
 	public static Collection<Object[]> badDefVhdlFiles() {
-		return oneD2twoD(Utils351.files("tests/vhdl/undefined_var", "^.*\\.vhd$"));
+		return oneD2twoD(Utils351.files("tests/vhdl/undefined-var", "^.*\\.vhd$"));
 	}
 	
 	public static Collection<Object[]> desugaredVhdlFiles() {
