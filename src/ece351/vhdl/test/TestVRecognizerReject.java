@@ -1,5 +1,6 @@
 package ece351.vhdl.test;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import ece351.TestPrelab;
 import ece351.util.CommandLine;
 import ece351.util.TestInputs351;
 import ece351.vhdl.VRecognizer;
@@ -30,6 +32,8 @@ public class TestVRecognizerReject {
 
 	@Test
 	public void accept() {
+		assertTrue(TestPrelab.areAssertionsEnabled());
+
 		final String inputSpec = f.getAbsolutePath();
 		System.out.println("reading: " + inputSpec);
 		final CommandLine c = new CommandLine(inputSpec);
