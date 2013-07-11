@@ -53,8 +53,7 @@ public class TestSimulatorGenerator {
 		return TestInputs351.formulaFiles();
 	}
 	
-	@Test
-	public void simgen() throws IOException {
+	@Test public void simgen() throws IOException {
 		assertTrue(TestPrelab.areAssertionsEnabled());
 		
 		final String inputSpec = input.getAbsolutePath();
