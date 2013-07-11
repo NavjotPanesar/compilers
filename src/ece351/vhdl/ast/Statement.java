@@ -4,4 +4,6 @@ import ece351.util.Examinable;
 
 public abstract class Statement implements Examinable {
 
+	public abstract boolean repOk();
+	
 }

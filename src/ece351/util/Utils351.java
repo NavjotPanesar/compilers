@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
+import org.parboiled.common.ImmutableList;
+
 // TODO: remove class Utils351
 public final class Utils351 {
 
@@ -138,6 +140,14 @@ public final class Utils351 {
 		Collections.sort(result);
 		return result.toArray(new File[]{});
 	}
-	
+
+	public static String bitListToString(final ImmutableList<String> list) {
+		StringBuilder s = new StringBuilder();
+		for(final String item : list) {
+			s.append(item); s.append(", ");
+		}
+		if (s.length() > 0) {s.delete(s.length()-2,	s.length()-1);}
+		return s.toString();
+	}
 
 }
