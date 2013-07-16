@@ -12,7 +12,6 @@ public abstract class BinaryExpr extends Expr {
 	public BinaryExpr(final Expr left, final Expr right){
 		this.left = left;
 		this.right = right;
-		assert repOk();
 	}
 	
 	@Override
