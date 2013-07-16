@@ -75,6 +75,13 @@
     </fileset>
   </path>
 
+  <path id="tests-lab-10">
+    <fileset dir="${build.dir}">
+      <include name="ece351/vhdl/test/TestDeSugarer.class" />
+      <include name="ece351/vhdl/test/TestElaborator.class" />
+    </fileset>
+  </path>
+
   <target name="compile" description="Compile the source">
     <mkdir dir="${build.dir}" />
     <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="classpath"
@@ -193,6 +200,14 @@
 
   <target name="report-lab-9" depends="compile" description="Report Lab 9">
     <report refid="tests-lab-9" folder="lab-9" />
+  </target>
+
+  <target name="test-lab-10" depends="compile" description="Test Lab 10">
+    <test refid="tests-lab-10" />
+  </target>
+
+  <target name="report-lab-10" depends="compile" description="Report Lab 10">
+    <report refid="tests-lab-10" folder="lab-10" />
   </target>
 
   <target name="clean" description="Clean up build">
