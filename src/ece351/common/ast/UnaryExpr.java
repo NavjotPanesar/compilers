@@ -8,7 +8,6 @@ public abstract class UnaryExpr extends Expr {
 
     public UnaryExpr(final Expr e) { 
     	this.expr = e; 
-		assert repOk();
     }
 
 	@Override
