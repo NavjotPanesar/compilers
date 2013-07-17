@@ -1,0 +1,45 @@
+\chapter{Simulation: \F $\rightarrow$ Assembler}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Which assembler to use?}
+
+Options include:
+
+\begin{itemize}
+
+    \item \textsc{masm32}. Requires a 32 bit \textsc{jdk}.
+
+    \item \emph{MIPS Assembler and Runtime Simulator (MARS)}. A Java
+    implementation of the \textsc{risc} machine described in the
+    Hennessey \& Patterson computer architecture textbook.
+    \url{http://courses.missouristate.edu/kenvollmar/mars/}
+
+\end{itemize}
+
+%-----------------------------------------------------------------------
+\section{\textsc{masm32} Setup}
+
+\biTight
+
+\item Configure Eclipse to use 32-bit JDK (see prelab for instructions)
+
+\item Install MASM32 on Windows (ideally to the default \code{C:\\masm32}).
+
+\item Add \code{C:\\masm32\\bin} to your system path environment variable
+
+\item Open a new command line window (to refresh path) and type "ML.EXE". It should output "Microsoft (R) Macro Assembler Version 6.14.8444...". If not, then the environment variable was not set correctly.
+
+\ei
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Tips:}
+
+\biTight
+
+\item To see the JNI signatures uncomment the code for "javah" in TestSimulatorGeneratorMasm32.java; this will cause the C header to be generated. You will need to change the JDK path
+
+\item If the batch file fails, check to see if MASM32 is on the system path and whether the directories in the batch file are correct.
+
+\item Most of the Lab 8 code can be copied and pasted; the only difference is that for the methods, only the signature should be generated.
+
+\ei
