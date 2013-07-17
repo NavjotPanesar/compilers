@@ -8,7 +8,6 @@ public final class VarExpr extends Expr {
 	
 	public VarExpr(final String name){
 		this.identifier = name;
-		assert repOk();
 	}
 	
 	public VarExpr(final Object name) {
