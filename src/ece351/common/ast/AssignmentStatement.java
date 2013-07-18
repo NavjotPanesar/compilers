@@ -11,6 +11,11 @@ public final class AssignmentStatement extends Statement implements Examinable {
 	public final VarExpr outputVar;
 	public final Expr expr;
 	
+	public AssignmentStatement() {
+		outputVar = null;
+		expr = null;
+	}
+	
 	public AssignmentStatement(String var, Expr expr)
 	{
 		this.outputVar = new VarExpr(var);
@@ -77,5 +82,12 @@ throw new ece351.util.Todo351Exception();
 	public AssignmentStatement setExpr(final Object e) {
 		return new AssignmentStatement(outputVar, (Expr)e);
 	}
+	
+	public AssignmentStatement setOutputVar(final VarExpr v) {
+		return new AssignmentStatement(v, expr);
+	}
 
+	public AssignmentStatement setOutputVar(final String s) {
+		return new AssignmentStatement(new VarExpr(s), expr);
+	}
 }
