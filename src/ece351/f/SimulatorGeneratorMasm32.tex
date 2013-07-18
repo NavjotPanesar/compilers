@@ -19,41 +19,55 @@ Options include:
 \end{itemize}
 
 %-----------------------------------------------------------------------
-\section{\textsc{masm32} Setup}
+\section{\textsc{masm32} Configuration}
 
 \biTight
 
-\item Configure Eclipse to use 32-bit JDK (see prelab for instructions)
-
-\item Install MASM32 on Windows (ideally to the default \code{C:\\masm32}).
-
-\item Add \code{C:\\masm32\\bin} to your system path environment variable
-
-\item Open a new command line window (to refresh path) and type "ML.EXE". It should output "Microsoft (R) Macro Assembler Version 6.14.8444...". If not, then the environment variable was not set correctly.
-
-\ei
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Tips:}
-
-\biTight
-
-\item To see the JNI signatures uncomment the code for "javah" in TestSimulatorGeneratorMasm32.java; this will cause the C header to be generated. You will need to change the JDK path
-
-\item If the batch file fails, check to see if MASM32 is on the system path and whether the directories in the batch file are correct.
-
-\item Most of the Lab 8 code can be copied and pasted; the only difference is that for the methods, only the signature should be generated.
+\item MASM32 requires Windows (any version should work). MASM32 includes an old version of Microsoft’s assembler ml.exe. Newer version are included with releases of Visual Studio releases and support newer instruction.
+\item Install the 32-bit JDK and configure your Eclipse installation to use this JDK. JNI and Windows operating systems require that 64-bit programs use 64-bit dynamic libraries (ie. what MASM32 will generate). 64-bit programs cannot use 32-bit libraries. 
+\item A possible multi-platform alternative to experiment with, which is NOT-supported by the skeleton or test harness, is JWASM.
+\item It can be downloaded from http://www.masm32.com/
+\item It is recommended that you install MASM32 to \code{C:\\masm32}
+\item Add (\code{<Install Path>\\bin}) to your system path environment variable (ie. \code{C:\\masm32\\bin})
+\item To check if it was added to the path, open a new command window and type "ml.exe". It should output "Microsoft (R) Macro Assembler Version 6.14.8444...".
 
 \ei
+
+%-----------------------------------------------------------------------
+\section{\textsc{masm32} JNI and x86 Assembly}
+
+\marginnote{You can use the JavaH tool in order to see the function signatures. It is included with the JDK to generate the C header for a java class. You can modify TestSimulatorGeneratorMasm32.java to generate the headers files by uncommenting the lines which write the batch file. You will need to change the path to point to your JDK. To see how java call types map to standard C types (and hence ASM), see jni.h (in the JDK).}
+%
+The skeleton and test harness created for solving this lab using MASM32 are based on the Lab 8 and so approximately a third of the redacted skeleton code can be taken from a lab 8 solution. The main difference from lab 8 is the means in which the F-statements are evaluated. In lab 8, methods were created and defined in Java for each statement by walking the tree using pre-order. In lab 12, these methods are to be implemented in x86 assembly. It is not possible to include inline assembly in Java as Java is executed in the JVM. Therefore the x86 is assembled and linked into a shared library (dynamic link library (DLL) on Windows). This library must be loaded by the generated java code using the Java Native Interface (JNI). 
+%
+JNI allows native functions to be added to the class which loads the library. The library load in the skeleton is static while the methods are not static. Hence the main method will instantiate its own class and make calls to its non-static native methods. JNI also imposes certain naming conventions on the signatures of functions declared in the shared library. For example the native method “public native boolean Simulator_opt1_or_true1 (final boolean a);” translates to the C shared library export signature “JNIEXPORT jboolean JNICALL Java_Simulator_1opt1_1or_1true1_Evalx(JNIEnv *, jobject, jboolean);”. This C export translates to the x86 assembly signature (for the purposes of the this lab) “Java_Simulator_1opt1_1or_1true1_Evalx proc JNIEnv:DWORD, jobject:DWORD, in_a:BYTE”. It is notable that JNI requires including pointers to the Java environment and the Java class instance. It is also notable that the underscores in the class name and the method name must be replaced with “_1”. Most of the function prototype details are already included in the skeleton.
+%
 
 \noindent
-%
-\figref{masm32.java} shows an excerpt of the skeleton code.
+\figref{SimulatorExample.asm} is a simple example of the generate code for a shared library for a F Program.
 
 %-----------------------------------------------------------------------
 \begin{figure}
-\label{fig:masm32.java}
-\caption{Excerpt from SimulatorGeneratorMasm32.java}
-\lstinputlisting[firstline=32,lastline=65]{SimulatorGeneratorMasm32.java}
+\label{fig:SimulatorExample.asm}
+\caption{Example assembly for an F Program}
+\lstinputlisting[firstline=32,lastline=65]{SimulatorExample.asm}
 \end{figure}
 %-----------------------------------------------------------------------
+
+\figref{SimulatorExample.def} The linker for MASM32 uses a definitions file to determine which symbols should be exported. Note that the library name does not require the replacing underscores. Additional exports are added on separate lines.
+
+%-----------------------------------------------------------------------
+\begin{figure}
+\label{fig:SimulatorExample.def}
+\caption{Example definitions file for a dynamic link library (DLL)}
+\lstinputlisting[firstline=32,lastline=65]{SimulatorExample.def}
+\end{figure}
+%-----------------------------------------------------------------------
+
+\marginnote{Edit SimulatorGeneratorMasm32.java and run TestSimulatorGeneratorMasm32.java}
+%
+This lab requires generating the instructions for the F-statement. Most of the other code is generated by the skeleton. To generate the instructions, the AST should be walked in post order as a simple topological sort and stored in the operations list. It is then necessary to assign signals and intermediate signals to registers and write instructions for each AST object. For example VarExpr or ConstantExpr can be converted into 8-bit immediate-mode mov instructions. The other operators can be implemented using various Boolean operator instruction. It is possible to implement all expressions including a NotExpr using a single instruction and no conditionals. The result of the last computation for the statement should be stored in EAX as the return value for the function. x86 has four 32-bit general purpose registers EAX, EBX, ECX, and EDX and supports 16-bit and 8-bit access modes. A helper class is provided which contains the names of that correspond to the other addressing modes (ie. AL references the low byte of EAX). 
+%
+Since there are only four registers (or fewer if you remove some from the Register.General list for debugging purposes), it is possible that large assignment statements will require the use of memory. A simple FIFO (registerQueue) strategy is used to determine which register to save to memory and reassign before performing an operation. Memory can be allocated using the LOCAL keyword: “LOCAL m0 :BYTE”. These allocation statements should be immediately following the function signature before any instructions. In order to track which memory is in use the hash map memoryMap maps the name of the memory allocation to a Boolean value of whether it is used. For convenience the IdentityHashMap storageMap maps an Expr to the name of either the memory or register currently storing its output value.
+
+
