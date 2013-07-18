@@ -60,6 +60,25 @@ public final class FProgram implements Examinable {
 		return new FProgram(formulas.append((AssignmentStatement)formula));
 	}
 
+	public FProgram appendAll(final FProgram p) {
+		ImmutableList<AssignmentStatement> result;
+		ImmutableList<AssignmentStatement> rest;
+		// determine which is longer and which is shorter
+		if (formulas.size() > p.formulas.size()) {
+			result = this.formulas;
+			rest = p.formulas;
+		} else {
+			result = p.formulas;
+			rest = this.formulas;
+		}
+		// add the shorter one to the longer one
+		for (final AssignmentStatement a : rest) {
+			result = result.append(a);
+		}
+		assert result.size() == (formulas.size() + p.formulas.size());
+		return new FProgram(result);
+	}
+
     public FProgram simplify() {
     	final List<AssignmentStatement> newformulas = new ArrayList<AssignmentStatement>(formulas.size());
     	for (final AssignmentStatement f : formulas) {
@@ -148,4 +167,5 @@ throw new ece351.util.Todo351Exception();
 		}
 		return result;
 	}
+
 }
