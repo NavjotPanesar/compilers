@@ -15,6 +15,7 @@ import ece351.util.ExaminableProperties;
 import ece351.util.TestInputs351;
 import ece351.vhdl.DeSugarer;
 import ece351.vhdl.Splitter;
+import ece351.vhdl.VParser;
 import ece351.vhdl.ast.VProgram;
 
 
@@ -62,14 +63,12 @@ public final class TestSplitter {
 		assertTrue("no matching file found to compare the input file: " + inputSpec, solnSpec.length() > 0);
 		System.out.println("checking process split output against: " + solnSpec);
 		final CommandLine sc = new CommandLine(solnSpec);
-		// invoke the desugarer on the solution file instead of the parser because the
-		// desugarer invokes the standardization procedure to create ASTs with n-ary expressions
-		final VProgram vp2 = DeSugarer.desugar(sc);
+		final VProgram vp2 = VParser.parse(sc.readInputSpec());
 		assertTrue(vp2.repOk());
 		System.out.println("solution: ");
 		System.out.println(vp2.toString());
-		// check that the two ASTs are isomorphic (syntactically the same)
-		assertTrue("ASTs differ for " + inputSpec, vp1.isomorphic(vp2));
+		// check that the two ASTs are equivalent (logically the same)
+		assertTrue("ASTs differ for " + inputSpec, vp1.equivalent(vp2));
 		// check examinable sanity
 		ExaminableProperties.checkAllUnary(vp1);
 		ExaminableProperties.checkAllUnary(vp2);

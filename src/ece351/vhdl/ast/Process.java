@@ -71,38 +71,34 @@ public final class Process extends Statement implements Examinable {
 	
     @Override
 	public boolean equals(final Object obj) {
-		// basics
-		if (obj == null) return false;
-		if (!obj.getClass().equals(this.getClass())) return false;
-		final Process that = (Process) obj;
-		
-		// compare field values using Examiner.orderedExamination()
-		if (!Examiner.orderedEquals(this.sensitivityList, that.sensitivityList)
-			|| !Examiner.orderedExamination(Examiner.Equals, this.sequentialStatements, that.sequentialStatements)) return false;
-		
-		// no significant differences
-		return true;
+    	if (!(obj instanceof Examinable)) return false;
+		return examine(Examiner.Equals, (Examinable)obj);
 	}
 	
 	@Override
 	public boolean isomorphic(final Examinable obj) {
+		return examine(Examiner.Isomorphic, obj);
+	}
+
+	@Override
+	public boolean equivalent(final Examinable obj) {
+		return examine(Examiner.Equivalent, obj);
+	}
+
+	private boolean examine(final Examiner examiner, final Examinable obj) {
 		// basics
 		if (obj == null) return false;
 		if (!obj.getClass().equals(this.getClass())) return false;
 		final Process that = (Process) obj;
 		
-		// compare field values using Examiner.orderedExamination()
+		// compare field values
+		if (!Examiner.unorderedEquals(this.sensitivityList, that.sensitivityList)) return false;
+		
 		// the statements within each process should be ordered, since the statements execute in sequence (and not parallel)
-		// however, compare each statement isomorphically
-		if (!Examiner.unorderedEquals(this.sensitivityList, that.sensitivityList)
-			|| !Examiner.orderedExamination(Examiner.Isomorphic, this.sequentialStatements, that.sequentialStatements)) return false;
+		if (!Examiner.orderedExamination(examiner, this.sequentialStatements, that.sequentialStatements)) return false;
 		
 		// no significant differences
 		return true;
 	}
 
-	@Override
-	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
-	}
 }

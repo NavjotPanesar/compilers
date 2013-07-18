@@ -70,9 +70,15 @@ public final class AssignmentStatement extends Statement implements Examinable {
 throw new ece351.util.Todo351Exception();
 	}
 
+	/**
+	 * Call a SAT solver to compute logical equivalence.
+	 */
 	@Override
 	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
+		if (!(obj instanceof AssignmentStatement)) return false;
+		final FProgram fp1 = new FProgram(ImmutableList.of(this));
+		final FProgram fp2 = new FProgram(ImmutableList.of((AssignmentStatement)obj));
+		return fp1.equivalent(fp2);
 	}
 	
 	public AssignmentStatement simplify() {

@@ -19,16 +19,6 @@ public abstract class CommutativeBinaryExpr extends BinaryExpr {
 		return examine(Examiner.Isomorphic, obj);
 	}
 
-	/**
-	 * Allow for arguments to be commuted (swapped).
-	 * So either left=left + right=right OR
-	 * left=right + right=left.
-	 */
-	@Override
-	public final boolean equivalent(final Examinable obj) {
-		return examine(Examiner.Equivalent, obj);
-	}
-
 	private boolean examine(final Examiner e, final Examinable obj) {
 		// basics
 		if (obj == null) return false;

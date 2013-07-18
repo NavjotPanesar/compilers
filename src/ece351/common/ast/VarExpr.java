@@ -52,11 +52,6 @@ public final class VarExpr extends Expr {
 throw new ece351.util.Todo351Exception();
 	}
 
-	@Override
-	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
-	}
-
 	public String operator() {
 		return "var";
 	}

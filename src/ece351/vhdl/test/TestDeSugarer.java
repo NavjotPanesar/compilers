@@ -66,8 +66,8 @@ public final class TestDeSugarer {
 		assertTrue(vp2.repOk());
 		System.out.println("solution: ");
 		System.out.println(vp2.toString());
-		// check that the two ASTs are isomorphic (syntactically the same)
-		assertTrue("ASTs differ for " + inputSpec, vp1.isomorphic(vp2));
+		// check that the two ASTs are equivalent (logically the same)
+		assertTrue("VPrograms differ " + inputSpec, vp1.equivalent(vp2));
 		// check examinable sanity
 		ExaminableProperties.checkAllUnary(vp1);
 		ExaminableProperties.checkAllUnary(vp2);

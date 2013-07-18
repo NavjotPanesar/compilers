@@ -45,11 +45,6 @@ throw new ece351.util.Todo351Exception();
 	}
 
 	@Override
-	public final boolean equivalent(final Examinable obj) {
-		return examine(Examiner.Equivalent, obj);
-	}
-	
-	@Override
 	public final String toString() {
 	    	return "( " + operator() + " ( "+this.expr+ " ) )";
 	}

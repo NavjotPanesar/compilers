@@ -45,8 +45,7 @@ public final class TestSynthesizer {
 		System.out.println(fp);
 		assertTrue(fp.repOk());
 		System.out.println("synthesizer generated a valid F program\n");
-		// TODO: remove dependency on simplifier
-		final FProgram fp1 = fp.simplify();
+		final FProgram fp1 = fp;
 		
 		// find the appropriate solution file for comparison
 		String solnSpec = "";
@@ -66,14 +65,12 @@ public final class TestSynthesizer {
 		assertTrue("no matching file found to compare the input file: " + inputSpec, solnSpec.length() > 0);
 		System.out.println("checking f program output against: " + solnSpec);
 		final CommandLine sc = new CommandLine("-h", "-o4", solnSpec);
-		FProgram fp2 = FParboiledParser.parse(sc.readInputSpec());
-		assertTrue(fp2.repOk());
-		fp2 = fp2.simplify();
+		final FProgram fp2 = FParboiledParser.parse(sc.readInputSpec());
 		assertTrue(fp2.repOk());
 		System.out.println("solution: ");
 		System.out.println(fp2.toString());
-		// check that the two ASTs are isomorphic (syntactically the same)
-		assertTrue("ASTs differ for " + inputSpec, fp1.isomorphic(fp2));
+		// check that the two ASTs are equivalent (logically the same)
+		assertTrue("ASTs differ for " + inputSpec, fp1.equivalent(fp2));
 		// check examinable sanity
 		ExaminableProperties.checkAllUnary(fp1);
 		ExaminableProperties.checkAllUnary(fp2);

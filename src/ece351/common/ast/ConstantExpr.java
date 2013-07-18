@@ -73,9 +73,4 @@ throw new ece351.util.Todo351Exception();
 		return equals(obj);
 	}
 
-	@Override
-	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
-	}
-
 }
