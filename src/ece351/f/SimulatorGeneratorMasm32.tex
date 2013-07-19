@@ -1,7 +1,42 @@
-\chapter{Simulation: \F $\rightarrow$ Assembler}
+\chapter{Simulation: \F $\rightarrow$ Assembly}
 
 \marginnote[-1in]{\emph{This lab by Nicholas Champion.}}
-\marginnote{\emph{Choice:} You can do either this lab or the original \lab{11}. Don't do both.}
+\marginnote[-0.6in]{\emph{Choice:} You can do either this lab or the original \lab{11}. Don't do both.
+
+There is no official instructional support for this lab. Do not attempt
+this lab if you are not comfortable learning assembly on your own and
+configuring your system to work with the assembler that you have
+chosen.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In \labref{simulator} you generated Java code from an \F program. That
+Java code would read and write \W files, simulating the \F program for
+each clock tick.
+%
+In this lab you will make a variation of the simulator generator from
+\labref{simulator}. The main loop is still the same, with the call to
+the \W parser \etc. The only part that will be different is the methods
+you generate to compute the values of the output pins. For example, in
+\labref{simulator} you might have generated a method like the one shown
+in \figref{Simulator_ex11b.java}.
+%
+The point of this lab is to generate these methods in assembly, and have
+the main body (still in Java) call the assembly versions.
+
+
+%-----------------------------------------------------------------------
+\begin{figure}
+\label{fig:Simulator_ex11b.java}
+\caption{Generate this method in assembly rather than in Java}
+%\lstinputlisting{../code/tests/f/soln.out/simulator/Simulator_ex11.java}
+%\lstinputlisting[basicstyle=\small\sffamily,showstringspaces=false,columns=fullflexible,]{f/Simulator_ex11.java}
+\lstinputlisting[basicstyle=\small\sffamily,showstringspaces=false,columns=fullflexible,firstline=54,lastline=55]{../code/tests/f/staff.out/simulator/Simulator_ex11.java}
+\end{figure}
+%-----------------------------------------------------------------------
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Which assembler to use?}
@@ -10,12 +45,36 @@ Options include:
 
 \begin{itemize}
 
-    \item \textsc{masm32}. Requires a 32 bit \textsc{jdk}.
+    \item \textsc{masm32}. Requires a 32 bit \textsc{jdk}. This is the
+    option supported by the description below and the skeleton code. The
+    other options have no instructional support.
 
-    \item \emph{MIPS Assembler and Runtime Simulator (MARS)}. A Java
-    implementation of the \textsc{risc} machine described in the
+    \item \textsc{gcc} with inline assembly.
+
+    \item JWasm \url{http://www.japheth.de/JWasm.html}. JWasm is an
+    open-source fork of the Watcom assembler (Wasm). It is written in C
+    and is \textsc{masm} compatible. The `J' here apparently stands for
+    the maintainer (Japheth), and not for Java. 
+    
+    Watcom, as you know, is from the University of Waterloo. UW has a
+    long and famous history with compilers, that you can read a little
+    bit about at
+    \url{http://www.openwatcom.com/index.php/Project_History}
+
+    \item \emph{MIPS Assembler and Runtime Simulator (MARS)}. 
+    %
+    \marginnote{There might be some bonus marks available if you develop
+    a skeleton and some instructional support for an assembler such as
+    \textsc{mars} that has no system dependencies outside of a regular
+    \textsc{jvm}.}
+    %
+    A Java implementation of the \textsc{risc} machine described in the
     Hennessey \& Patterson computer architecture textbook.
-    \url{http://courses.missouristate.edu/kenvollmar/mars/}
+    \url{http://courses.missouristate.edu/kenvollmar/mars/} Because this
+    is a simulator written in Java, it might avoid a lot of the systems
+    issues of going to x86 assembly. Also, it might be easier to
+    generate MIPS assembly than x86 (RISC instruction sets are usually
+    simpler than CISC ones).
 
 \end{itemize}
 
@@ -78,7 +137,9 @@ It is notable that JNI requires including pointers to the Java environment and t
 \end{figure}
 %-----------------------------------------------------------------------
 
-\figref{SimulatorExample.def} The linker for MASM32 uses a definitions file to determine which symbols should be exported. Note that the library name does not require the replacing underscores. Additional exports are added on separate lines.
+\clearpage
+
+\figref{SimulatorExample.def} the linker for MASM32 uses a definitions file to determine which symbols should be exported. Note that the library name does not require the replacing underscores. Additional exports are added on separate lines.
 
 %-----------------------------------------------------------------------
 \begin{figure}
@@ -94,4 +155,19 @@ This lab requires generating the instructions for the F-statement. Most of the o
 %
 Since there are only four registers (or fewer if you remove some from the Register.General list for debugging purposes), it is possible that large assignment statements will require the use of memory. A simple FIFO (registerQueue) strategy is used to determine which register to save to memory and reassign before performing an operation. Memory can be allocated using the LOCAL keyword: \code{LOCAL m0 :BYTE}. These allocation statements should be immediately following the function signature before any instructions. In order to track which memory is in use the hash map memoryMap maps the name of the memory allocation to a Boolean value of whether it is used. For convenience the IdentityHashMap storageMap maps an Expr to the name of either the memory or register currently storing its output value.
 
+
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Evaluation}
+
+There is no automated evaluation for this lab due to the variety of
+possible system dependencies. You will have to meet with the course
+staff to be evaluated, which will include you answering questions about
+how your design works. Your generated assembly code should pass all of
+the tests from \labref{simulator}.
+
+There are potentially bonus marks if you find a cross-platform assembler
+with minimal system dependencies and develop a bit of a skeleton and
+instructional support for it. The \textsc{mars} \textsc{mips} simulator
+mentioned above is the best possibility for this that we are aware of.
 
