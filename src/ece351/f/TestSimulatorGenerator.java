@@ -78,7 +78,6 @@ public class TestSimulatorGenerator {
 		// parse from the F file
 		final FProgram original = FParser.parse(c);
 		assertTrue(original.repOk());
-		ExaminableProperties.checkAllUnary(original);
 		computeFileNames(inputSpec, original);
 
 		// generate the Java output
