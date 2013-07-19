@@ -17,7 +17,7 @@ public /*final*/ class VRecognizer extends VBase {
     }
 
     public Rule Program() {
-    	// TODO: Write a recognizer that accepts grammatical VHDL inputs
+    	// Write a recognizer that accepts grammatical VHDL inputs
     	// For the grammar production Id, ensure that the Id does not match any of the keywords specified
     	// in the rule, 'Keyword'
     	return Sequence(ZeroOrMore(DesignUnit()),EOI);

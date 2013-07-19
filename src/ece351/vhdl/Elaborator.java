@@ -56,42 +56,120 @@ public final class Elaborator extends PostOrderVExprVisitor {
 	}
 
 	private VProgram elaborateit(final VProgram root) {
-			// In the elaborator, an architecture's list of signals, and set of statements may change (grow)
-						//populate dictionary/map	
-						//add input signals, map to ports
-						//add output signals, map to ports
-						//add local signals, add to signal list of i						
-						//loop through the statements in the architecture body		
-							//make the appropriate variable substitutions for signal assignment statements
-							//make the appropriate variable substitutions for processes (sensitivity list, if/else body statements)
-// TODO: 58 lines snipped
-throw new ece351.util.Todo351Exception();
+			// In the elaborator, an architecture's list of signals, 
+			//and set of statements may change (grow)
+			//populate dictionary/map
+		int num = 0;
+		VProgram result = new VProgram();
+		for(DesignUnit dunit : root.designUnits){
+			Architecture modArch = dunit.arch;
+			//dunit.entity.input;
+			//dunit.entity.output;
+			for(Component comp :dunit.arch.components){
+				current_map.clear();
+				int signal_id = 0;
+				num++;
+				//add input signals, map to ports
+				//add output signals, map to ports
+				//add local signals, add to signal list of i
+				DesignUnit source_unit = null;
+				for(DesignUnit du : result.designUnits){
+					if(du.identifier.equals(comp.entityName)){
+						source_unit = du;
+						break;
+					}
+				}
+				for(String sig_key: source_unit.entity.input){
+					current_map.put(
+							sig_key,
+							comp.signalList.get(signal_id++)
+							);
+				}
+				for(String sig_key: source_unit.entity.output){
+					current_map.put(
+							sig_key,
+							comp.signalList.get(signal_id++)
+							);
+				}
+				for(String sig_key: source_unit.arch.signals){
+					String sig_new = "comp"+num+"_"+sig_key;
+					current_map.put(
+							sig_key,
+							sig_new
+							);
+					modArch = modArch.appendSignal(sig_new);
+				}
+				//loop through the statements in the architecture body
+				for(Statement ent_stm: source_unit.arch.statements){
+					//make the appropriate variable substitutions for signal assignment statements
+					//make the appropriate variable substitutions for processes (sensitivity list, if/else body statements)
+					Statement elab_stm = null;
+					if(ent_stm instanceof Process){
+						elab_stm = expandProcessComponent((Process)ent_stm);
+					}else if(ent_stm instanceof IfElseStatement){
+						elab_stm = changeIfVars((IfElseStatement)ent_stm);
+					}else if(ent_stm instanceof AssignmentStatement){
+						elab_stm = changeStatementVars((AssignmentStatement)ent_stm);
+					}
+					modArch = modArch.appendStatement((Statement)elab_stm);
+				}
+			}
+			modArch = modArch.setComponents(ImmutableList.<Component>of());
+			result = result.append(dunit.setArchitecture(modArch));
+		}
+		return result;
 	}
 	
 	// you do not have to use these helper methods; we found them useful though
 	private Process expandProcessComponent(final Process process) {
-// TODO: 15 lines snipped
-throw new ece351.util.Todo351Exception();
+			Process new_proc = new Process();
+			for(String sens :process.sensitivityList){
+				String s = sens;
+				if(current_map.containsKey(sens)){
+					s = current_map.get(sens);
+				}
+				new_proc = new_proc.appendSensitivity(s);
+			}
+			for(Statement stmt :process.sequentialStatements){
+				if(stmt instanceof IfElseStatement){
+					new_proc = new_proc.appendStatement(
+							changeIfVars((IfElseStatement)stmt)
+							);
+				}else if(stmt instanceof AssignmentStatement){
+					new_proc = new_proc.appendStatement(
+							changeStatementVars((AssignmentStatement)stmt)
+					);
+				}
+			}
+			return new_proc;
 	}
 	
 	// you do not have to use these helper methods; we found them useful though
 	private  IfElseStatement changeIfVars(final IfElseStatement s) {
-// TODO: 14 lines snipped
-throw new ece351.util.Todo351Exception();
+		IfElseStatement new_stm = new IfElseStatement(traverse(s.condition));
+		for(Statement stmt :s.ifBody){
+			new_stm = new_stm.appendToTrueBlock(
+					changeStatementVars((AssignmentStatement)stmt)
+					);
+		}
+		for(Statement stmt :s.elseBody){
+			new_stm = new_stm.appendToElseBlock(
+					changeStatementVars((AssignmentStatement)stmt)
+					);
+		}
+		return new_stm;
 	}
 
 	// you do not have to use these helper methods; we found them useful though
 	private AssignmentStatement changeStatementVars(final AssignmentStatement s){
-// TODO: 2 lines snipped
-throw new ece351.util.Todo351Exception();
+		return new AssignmentStatement(current_map.get(s.outputVar.identifier),traverse(s.expr));
 	}
 	
 	
 	@Override
 	public Expr visit(VarExpr e) {
-		// TODO replace/substitute the variable found in the map
-// TODO: 1 lines snipped
-throw new ece351.util.Todo351Exception();
+		//  replace/substitute the variable found in the map
+		return new VarExpr(current_map.get(e.identifier));
 	}
 	
 	// do not rewrite these parts of the AST
