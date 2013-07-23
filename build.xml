@@ -100,7 +100,7 @@
   <macrodef name="test">
     <attribute name="refid" />
     <sequential>
-      <junit fork="yes" timeout="10000">
+      <junit fork="yes" timeout="100000">
         <jvmarg value="-ea" />
         <classpath>
           <path refid="classpath" />
@@ -119,7 +119,7 @@
     <attribute name="folder" />
     <sequential>
       <mkdir dir="${report.dir}/@{folder}" />
-      <junit fork="yes" timeout="10000">
+      <junit fork="yes" timeout="100000">
         <jvmarg value="-ea" />
         <classpath>
           <path refid="classpath" />
