@@ -234,7 +234,7 @@ public final class AlloyConverter extends FExprVisitor {
 		for(int i=0;i<e.children.size()-1;i++){
 			b.append("_"+(e.operator().equals("=")?"equal":e.operator()));
 			b.append("[ ");
-			e.children.get(0).accept(this);
+			e.children.get(i).accept(this);
 			b.append(", ");
 		}
 		e.children.get(size1).accept(this);
