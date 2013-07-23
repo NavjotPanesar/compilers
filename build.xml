@@ -82,6 +82,13 @@
     </fileset>
   </path>
 
+  <path id="tests-lab-11">
+    <fileset dir="${build.dir}">
+      <include name="ece351/vhdl/test/TestSplitter.class" />
+      <include name="ece351/vhdl/test/TestSynthesizer.class" />
+    </fileset>
+  </path>
+
   <target name="compile" description="Compile the source">
     <mkdir dir="${build.dir}" />
     <javac srcdir="${src.dir}" destdir="${build.dir}"  classpathref="classpath"
@@ -208,6 +215,14 @@
 
   <target name="report-lab-10" depends="compile" description="Report Lab 10">
     <report refid="tests-lab-10" folder="lab-10" />
+  </target>
+
+  <target name="test-lab-11" depends="compile" description="Test Lab 11">
+    <test refid="tests-lab-11" />
+  </target>
+
+  <target name="report-lab-11" depends="compile" description="Report Lab 11">
+    <report refid="tests-lab-11" folder="lab-11" />
   </target>
 
   <target name="clean" description="Clean up build">
