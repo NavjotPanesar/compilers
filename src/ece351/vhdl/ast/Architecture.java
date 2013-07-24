@@ -121,6 +121,15 @@ public final class Architecture implements Examinable {
 
 	@Override
 	public boolean isomorphic(final Examinable obj) {
+		return examine(Examiner.Isomorphic, obj);
+	}
+
+	@Override
+	public boolean equivalent(final Examinable obj) {
+		return examine(Examiner.Equivalent, obj);
+	}
+
+	private boolean examine(final Examiner examiner, final Examinable obj) {
 		// basics
 		if (obj == null)
 			return false;
@@ -132,19 +141,14 @@ public final class Architecture implements Examinable {
 		if (!this.architectureName.equals(that.architectureName)
 				|| !this.entityName.equals(that.entityName)
 				|| !Examiner.unorderedEquals(this.signals, that.signals)
-				|| !Examiner.unorderedExamination(Examiner.Isomorphic,
+				|| !Examiner.unorderedExamination(examiner,
 						this.components, that.components)
-				|| !Examiner.unorderedExamination(Examiner.Isomorphic,
+				|| !Examiner.unorderedExamination(examiner,
 						this.statements, that.statements))
 			return false;
 
 		// no significant differences
 		return true;
-	}
-
-	@Override
-	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
 	}
 
 	public boolean repOk() {

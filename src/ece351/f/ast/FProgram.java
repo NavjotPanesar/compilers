@@ -60,6 +60,25 @@ public final class FProgram implements Examinable {
 		return new FProgram(formulas.append((AssignmentStatement)formula));
 	}
 
+	public FProgram appendAll(final FProgram p) {
+		ImmutableList<AssignmentStatement> result;
+		ImmutableList<AssignmentStatement> rest;
+		// determine which is longer and which is shorter
+		if (formulas.size() > p.formulas.size()) {
+			result = this.formulas;
+			rest = p.formulas;
+		} else {
+			result = p.formulas;
+			rest = this.formulas;
+		}
+		// add the shorter one to the longer one
+		for (final AssignmentStatement a : rest) {
+			result = result.append(a);
+		}
+		assert result.size() == (formulas.size() + p.formulas.size());
+		return new FProgram(result);
+	}
+
     public FProgram simplify() {
     	final List<AssignmentStatement> newformulas = new ArrayList<AssignmentStatement>(formulas.size());
     	for (final AssignmentStatement f : formulas) {
@@ -127,17 +146,14 @@ public final class FProgram implements Examinable {
 		// of them might be effectively don't care
 		// so don't need to check input vars
 		
+		// generate the Alloy specification
+		// (will be translated to SAT in the next step)
+		final String alloy = AlloyConverter.convert(this, that);
+
 		// now the hard part ...
-		boolean result = false;
-		try {
-			// ask a SAT solver if these two FPrograms are equivalent
-			result = !RunAlloy351.check(AlloyConverter.convert(this, that));
-		} catch (final Exception e) {
-			// maybe a system problem happened calling the SAT solver,
-			// so let's just do an isomorphism check instead
-			System.err.println("Problem running SAT solver for FProgram.equivalent(), resorting to isomorphic()");
-			result = isomorphic(obj);
-		}
+		// ask a SAT solver if these two FPrograms are equivalent
+		final boolean result = !RunAlloy351.check(alloy);
 		return result;
 	}
+
 }

@@ -66,4 +66,16 @@ public abstract class Expr implements Comparable<Expr>, Examinable {
 	 * @return true if this object is in a legal state
 	 */
 	public abstract boolean repOk();
+	
+	/**
+	 * Call a SAT solver to compute logical equivalence.
+	 */
+	@Override
+	public final boolean equivalent(final Examinable obj) {
+		if (!(obj instanceof Expr)) return false;
+		final VarExpr v = new VarExpr("_astmt");
+		final AssignmentStatement a1 = new AssignmentStatement(v, this);
+		final AssignmentStatement a2 = new AssignmentStatement(v, (Expr)obj);
+		return a1.equivalent(a2);
+	}
 }

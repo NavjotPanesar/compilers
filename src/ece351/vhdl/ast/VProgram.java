@@ -65,21 +65,25 @@ public final class VProgram implements Examinable {
 	
 	@Override
 	public boolean isomorphic(final Examinable obj) {
+		return examine(Examiner.Isomorphic, obj);
+	}
+
+	@Override
+	public boolean equivalent(final Examinable obj) {
+		return examine(Examiner.Equivalent, obj);
+	}
+	
+	private boolean examine(final Examiner examiner, final Examinable obj) {
 		// basics
 		if (obj == null) return false;
 		if (!obj.getClass().equals(this.getClass())) return false;
 		final VProgram that = (VProgram) obj;
 		
 		// compare field values using Examiner.unorderedExamination()
-		if (!Examiner.unorderedExamination(Examiner.Isomorphic, this.designUnits, that.designUnits)) return false;
+		if (!Examiner.unorderedExamination(examiner, this.designUnits, that.designUnits)) return false;
 		
 		// no significant differences
 		return true;
 	}
 
-	@Override
-	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
-	}
-	
 }

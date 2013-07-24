@@ -7,7 +7,10 @@ import ece351.common.ast.AndExpr;
 import ece351.common.ast.AssignmentStatement;
 import ece351.common.ast.BinaryExpr;
 import ece351.common.ast.ConstantExpr;
+import ece351.common.ast.EqualExpr;
 import ece351.common.ast.Expr;
+import ece351.common.ast.NAndExpr;
+import ece351.common.ast.NOrExpr;
 import ece351.common.ast.NaryAndExpr;
 import ece351.common.ast.NaryExpr;
 import ece351.common.ast.NaryOrExpr;
@@ -15,6 +18,8 @@ import ece351.common.ast.NotExpr;
 import ece351.common.ast.OrExpr;
 import ece351.common.ast.UnaryExpr;
 import ece351.common.ast.VarExpr;
+import ece351.common.ast.XNOrExpr;
+import ece351.common.ast.XOrExpr;
 import ece351.f.DetermineInputVars;
 
 public final class AlloyConverter extends FExprVisitor {
@@ -37,6 +42,32 @@ public final class AlloyConverter extends FExprVisitor {
 		m.append("one sig true extends Boolean {}");
 		m.append(linesep);
 		m.append("abstract sig Var { v : lone Boolean }");
+		m.append(linesep);
+		m.append("one sig  TRUE,FALSE extends Var {}");
+		m.append(linesep);
+		m.append("fact{");
+		m.append(linesep);
+		m.append("	some TRUE.v");
+		m.append(linesep);
+		m.append("	no FALSE.v");
+		m.append(linesep);
+		m.append("}");
+		m.append(linesep);
+		m.append("fun _equal[a,b:Var]:Var{_xnor[a,b]}");
+		m.append(linesep);
+		m.append("fun _xor[a,b:Var]:Var{ _or[_and[a, _not[b]], _and[_not[a], b]] }");
+		m.append(linesep);
+		m.append("fun _or[a,b:Var]:Var{{v':(a+b) | ((some a.v)or(some b.v))<=>(v' in a+b)}}");
+		m.append(linesep);
+		m.append("fun _and[a,b:Var]:Var{{v':(a+b) | ((some a.v)and(some b.v))<=>(v' in a+b)}}");
+		m.append(linesep);
+		m.append("fun _xnor[a,b:Var]:Var{_not[_xor[a,b]]}");
+		m.append(linesep);
+		m.append("fun _nor[a,b:Var]:Var{_not[_or[a,b]]}");
+		m.append(linesep);
+		m.append("fun _nand[a,b:Var]:Var{_not[_and[a,b]]}");
+		m.append(linesep);
+		m.append("fun _not[a:Var]:Var{{v':Var|v'.v!=a.v}}");
 		m.append(linesep);
 		m.append("one sig ");
 		final Set<String> inputVars = new TreeSet<String>();
@@ -94,9 +125,9 @@ public final class AlloyConverter extends FExprVisitor {
 			m.append("pred ");
 			m.append(sanitize(a.outputVar));
 			m.append(suffix);
-			m.append("[] {");
+			m.append("[] {some ");
 			m.append((new AlloyConverter(a.expr)).toString());
-			m.append("}");
+			m.append(".v}");
 			m.append(linesep);
 		}
 	}
@@ -109,38 +140,38 @@ public final class AlloyConverter extends FExprVisitor {
 	@Override
 	public Expr visit(final ConstantExpr e) {
 		if (e.b) {
-			b.append(" (some Boolean) ");
+			b.append(" TRUE ");
 		} else {
-			b.append(" (no Boolean) ");
+			b.append(" FALSE ");
 		}
 		return e;
 	}
 
 	@Override
 	public Expr visit(final VarExpr e) {
-		b.append(" (some ");
+		//b.append(" (some ");
 		b.append(sanitize(e.identifier));
-		b.append(".v) ");
+		//b.append(".v) ");
 		return e;
 	}
 
 	@Override
 	public Expr visit(final NotExpr e) {
-		b.append(" (not ");
+		b.append(" _not[ ");
 		e.expr.accept(this);
-		b.append(") ");
+		b.append("] ");
 		return e;
 	}
 
 	@Override
 	public Expr visit(final AndExpr e) {
-		helperBE(e);
+		helperBXE(e);
 		return e;
 	}
 
 	@Override
 	public Expr visit(final OrExpr e) {
-		helperBE(e);
+		helperBXE(e);
 		return e;
 	}
 
@@ -153,6 +184,44 @@ public final class AlloyConverter extends FExprVisitor {
 		e.right.accept(this);
 		b.append(" ) ");
 	}
+	private void helperBXE(final BinaryExpr e) {
+		b.append("_"+(e.operator().equals("=")?"equal":e.operator()));
+		b.append("[ ");
+		e.left.accept(this);
+		b.append(", ");
+		e.right.accept(this);
+		b.append("] ");
+	}
+	@Override
+	public Expr visit(XOrExpr e) {
+		helperBXE(e);
+		return e;
+	}
+
+	@Override
+	public Expr visit(NAndExpr e) {
+		helperBXE(e);
+		return e;
+	}
+
+	@Override
+	public Expr visit(NOrExpr e) {
+		helperBXE(e);
+		return e;
+	}
+
+	@Override
+	public Expr visit(XNOrExpr e) {
+		helperBXE(e);
+		return e;
+	}
+
+	@Override
+	public Expr visit(EqualExpr e) {
+		helperBXE(e);
+		return e;
+	}
+
 
 	@Override
 	public Expr visit(final NaryAndExpr e) {
@@ -160,17 +229,18 @@ public final class AlloyConverter extends FExprVisitor {
 		return e;
 	}
 
-	private void helperNE(final NaryExpr e) {
-		b.append(" ( ");
+	private void helperNE(final NaryExpr e) {		
 		final int size1 = e.children.size()-1;
-		for (int i = 0; i < size1; i++) {
+		for(int i=0;i<e.children.size()-1;i++){
+			b.append("_"+(e.operator().equals("=")?"equal":e.operator()));
+			b.append("[ ");
 			e.children.get(i).accept(this);
-			b.append(" ");
-			b.append(e.operator());
-			b.append(" ");
+			b.append(", ");
 		}
 		e.children.get(size1).accept(this);
-		b.append(" ) ");
+		for(int i=0;i<size1;i++){
+			b.append("] ");
+		}
 	}
 
 	@Override

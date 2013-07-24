@@ -1,6 +1,7 @@
 package ece351.vhdl.ast;
 
 import ece351.util.Examinable;
+import ece351.util.Examiner;
 
 
 public final class DesignUnit implements Examinable {
@@ -35,39 +36,36 @@ public final class DesignUnit implements Examinable {
 	
 	@Override
 	public boolean equals(final Object obj) {
-		// basics
-		if (obj == null) return false;
-		if (!obj.getClass().equals(this.getClass())) return false;
-		final DesignUnit that = (DesignUnit) obj;
-
-		// compare field values
-		if (!this.identifier.equals(that.identifier) 
-				|| !this.arch.equals(that.arch)
-				|| !this.entity.equals(that.entity)) return false;
-
-		// no significant differences
-		return true;
+		if (!(obj instanceof Examinable)) return false;
+		return examine(Examiner.Equals, (Examinable)obj);
 	}
 
 	@Override
 	public boolean isomorphic(final Examinable obj) {
+		return examine(Examiner.Isomorphic, obj);
+	}
+
+	@Override
+	public boolean equivalent(final Examinable obj) {
+		return examine(Examiner.Equivalent, obj);
+	}
+
+	private boolean examine(final Examiner examiner, final Examinable obj) {
 		// basics
 		if (obj == null) return false;
 		if (!obj.getClass().equals(this.getClass())) return false;
 		final DesignUnit that = (DesignUnit) obj;
 
+		assert this.repOk();
+		assert that.repOk();
+		
 		// compare field values
 		if (!this.identifier.equals(that.identifier) 
-				|| !this.arch.isomorphic(that.arch)
-				|| !this.entity.isomorphic(that.entity)) return false;
+				|| !examiner.examine(this.arch, that.arch)
+				|| !examiner.examine(this.entity, that.entity)) return false;
 
 		// no significant differences
 		return true;
-	}
-
-	@Override
-	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
 	}
 
 	public boolean repOk() {

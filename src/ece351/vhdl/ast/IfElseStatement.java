@@ -4,6 +4,7 @@ import org.parboiled.common.ImmutableList;
 
 import ece351.common.ast.AssignmentStatement;
 import ece351.common.ast.Expr;
+import ece351.f.ast.FProgram;
 import ece351.util.Examinable;
 import ece351.util.Examiner;
 
@@ -126,6 +127,22 @@ public final class IfElseStatement extends Statement implements Examinable {
 
 	@Override
 	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
+		if (obj == null) return false;
+		if (!obj.getClass().equals(this.getClass())) return false;
+		final IfElseStatement that = (IfElseStatement) obj;
+		assert this.repOk();
+		assert that.repOk();
+		// condition
+		if (!condition.equivalent(that.condition)) return false;
+		// if body
+		final FProgram ib1 = new FProgram(this.ifBody);
+		final FProgram ib2 = new FProgram(that.ifBody);
+		if (!ib1.equivalent(ib2)) return false;
+		// else body
+		final FProgram eb1 = new FProgram(this.elseBody);
+		final FProgram eb2 = new FProgram(that.elseBody);
+		if (!eb1.equivalent(eb2)) return false;
+		// no significant differences
+		return true;
 	}
 }

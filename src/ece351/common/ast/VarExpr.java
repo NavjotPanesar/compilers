@@ -50,11 +50,6 @@ public final class VarExpr extends Expr {
 		return this.identifier.equals(that.identifier);
 	}
 
-	@Override
-	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
-	}
-
 	public String operator() {
 		return "var";
 	}

@@ -62,7 +62,18 @@ public final class Component implements Examinable {
 	
 	@Override
 	public boolean isomorphic(final Examinable obj) {		
-		return equals(obj);
+		// basics
+		if (obj == null) return false;
+		if (!obj.getClass().equals(this.getClass())) return false;
+		final Component that = (Component) obj;
+		
+		// compare field values using Examiner.unorderedEquals()
+		if (!this.entityName.equals(that.entityName)
+			|| !this.instanceName.equals(that.instanceName)
+			|| !Examiner.unorderedEquals(this.signalList, that.signalList)) return false;
+		
+		// no significant differences
+		return true;
 	}
 
 	@Override

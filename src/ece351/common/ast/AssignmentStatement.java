@@ -11,6 +11,11 @@ public final class AssignmentStatement extends Statement implements Examinable {
 	public final VarExpr outputVar;
 	public final Expr expr;
 	
+	public AssignmentStatement() {
+		outputVar = null;
+		expr = null;
+	}
+	
 	public AssignmentStatement(String var, Expr expr)
 	{
 		this.outputVar = new VarExpr(var);
@@ -63,9 +68,15 @@ public final class AssignmentStatement extends Statement implements Examinable {
 		return true;
 	}
 
+	/**
+	 * Call a SAT solver to compute logical equivalence.
+	 */
 	@Override
 	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
+		if (!(obj instanceof AssignmentStatement)) return false;
+		final FProgram fp1 = new FProgram(ImmutableList.of(this));
+		final FProgram fp2 = new FProgram(ImmutableList.of((AssignmentStatement)obj));
+		return fp1.equivalent(fp2);
 	}
 	
 	public AssignmentStatement simplify() {
@@ -75,5 +86,12 @@ public final class AssignmentStatement extends Statement implements Examinable {
 	public AssignmentStatement setExpr(final Object e) {
 		return new AssignmentStatement(outputVar, (Expr)e);
 	}
+	
+	public AssignmentStatement setOutputVar(final VarExpr v) {
+		return new AssignmentStatement(v, expr);
+	}
 
+	public AssignmentStatement setOutputVar(final String s) {
+		return new AssignmentStatement(new VarExpr(s), expr);
+	}
 }

@@ -43,11 +43,6 @@ public abstract class UnaryExpr extends Expr {
 	}
 
 	@Override
-	public final boolean equivalent(final Examinable obj) {
-		return examine(Examiner.Equivalent, obj);
-	}
-	
-	@Override
 	public final String toString() {
 	    	return "( " + operator() + " ( "+this.expr+ " ) )";
 	}

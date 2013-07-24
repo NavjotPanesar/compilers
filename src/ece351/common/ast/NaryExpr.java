@@ -148,12 +148,10 @@ public abstract class NaryExpr extends Expr {
 	public final boolean isomorphic(final Examinable obj) {
 		return examine(Examiner.Isomorphic, obj);
 	}
-
 	@Override
 	public final boolean equivalent(final Examinable obj) {
 		return examine(Examiner.Isomorphic, obj);
 	}
-
 	private boolean examine(final Examiner e, final Examinable obj) {
 		// basics
 		if (obj == null)

@@ -57,14 +57,6 @@ public abstract class BinaryExpr extends Expr {
 		return examine(Examiner.Isomorphic, obj);
 	}
 
-	/**
-	 * Subclasses may override this if order can be changed.
-	 */
-	@Override
-	public boolean equivalent(final Examinable obj) {
-		return examine(Examiner.Equivalent, obj);
-	}
-
 	private boolean examine(final Examiner e, final Object obj) {
 		// basics
 		if (obj == null) return false;

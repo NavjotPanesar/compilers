@@ -69,9 +69,4 @@ public final class ConstantExpr extends Expr {
 		return equals(obj);
 	}
 
-	@Override
-	public boolean equivalent(final Examinable obj) {
-		return isomorphic(obj);
-	}
-
 }
