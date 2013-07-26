@@ -6,7 +6,7 @@ end XNOR_test;
 architecture XNOR_test_arch of XNOR_test is
 
 begin
-	process ( x, y  ) 
+	process ( a, b, x, y  ) 
 		begin
 			F <= ( not ( ( ( x and ( not ( y ) ) ) or ( ( not ( x ) ) and y ) ) ) );
 			Z <= ( not ( ( ( ( x and y ) and ( not ( ( not ( ( ( a and ( not ( b ) ) ) or ( ( not ( a ) ) and b ) ) ) ) ) ) ) or ( ( not ( ( x and y ) ) ) and ( not ( ( ( a and ( not ( b ) ) ) or ( ( not ( a ) ) and b ) ) ) ) ) ) ) );

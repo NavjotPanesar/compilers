@@ -6,7 +6,7 @@ end XNOR_test;
 
 architecture XNOR_test_arch of XNOR_test is
 begin
-    process(x, y)
+    process(a, b, x, y)
     begin
         F <= x xnor y;
         Z <= (x and y) xnor (a xnor b);
