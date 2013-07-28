@@ -13,5 +13,7 @@ the term you will want to summarize for each week:
 - Any other contributions of note.
 
 ------------------------------------------------------------------------
-
-
+@180 on piazza. Found error in sensitivity list of scholida_nxor_1.vhd
+(Missing signals a,b)
+Answered a few questions, made 9 contributions
+All your bonus marks are belong to us :) cheers, David
