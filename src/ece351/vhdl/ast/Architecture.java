@@ -153,17 +153,19 @@ public final class Architecture implements Examinable {
 		if (!Examiner.unorderedExamination(examiner, this.components, that.components)) return false;
 		
 		// statements are more complicated
-		// special case: all process statements with assignments
-		final Tuple<FProgram,List<String>> thisT = this.assignments();
-		if (thisT == null) {
-			// not the special case, try general case
-			return Examiner.unorderedExamination(examiner, this.statements, that.statements);
-		} 
-		final Tuple<FProgram,List<String>> thatT = that.assignments();
-		if (thatT == null) {
-			// not the special case, try general case
-			return Examiner.unorderedExamination(examiner, this.statements, that.statements);
-		} 
+		// figure out which statements don't match up
+		final Tuple<? extends List<Statement>,? extends List<Statement>> d = Examiner.symmetricDifference(examiner, this.statements, that.statements, false);
+		
+		// did everything match?
+		if (d.x.isEmpty() && d.y.isEmpty()) return true;
+		
+		// some leftovers, see if they meet the special case
+		// that is, processes with assignments
+		final Tuple<FProgram,List<String>> thisT = assignments(d.x);
+		if (thisT == null) return false;
+		final Tuple<FProgram,List<String>> thatT = assignments(d.y);
+		if (thatT == null) return false;
+
 		// we're in the special case
 		// check sensitivity lists first
 		if (!thisT.y.equals(thatT.y)) return false;
@@ -175,10 +177,10 @@ public final class Architecture implements Examinable {
 	 * If this Architecture is just a list of processes with assignments, 
 	 * then merge the assignments, else return null.
 	 */
-	private Tuple<FProgram,List<String>> assignments() {
+	private static Tuple<FProgram,List<String>> assignments(final List<Statement> statements) {
 		FProgram fp = new FProgram();
 		SortedSet<String> sensitivity = new TreeSet<String>();
-		for (final Statement stmt1 : this.statements) {
+		for (final Statement stmt1 : statements) {
 			if (stmt1 instanceof Process) {
 				final Process p = (Process) stmt1;
 				for (final Statement stmt2 : p.sequentialStatements) {
