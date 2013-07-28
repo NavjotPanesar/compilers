@@ -60,7 +60,7 @@ public enum Examiner {
 		// no significant differences found
 		return true;
 	}
-	
+
 	/**
 	 * Returns true if the two lists have the same elements, 
 	 * possibly in a different order.
@@ -69,31 +69,63 @@ public enum Examiner {
 	 * @param b
 	 * @return
 	 */
-	public static <T extends Examinable> boolean unorderedExamination(final Examiner e, final List<T> a, final List<T> b) {
-		if (a == null && b == null) return true;
-		if (a == null) return false;
-		if (b == null) return false;
+	public static <T extends Examinable, L extends List<T>> boolean unorderedExamination(final Examiner e, final L a, final L b) {
+		final Tuple<? extends List<T>, ? extends List<T>> d = symmetricDifference(e, a, b, true);
+		return d.x.isEmpty() && d.y.isEmpty();
+	}
+	
+	/**
+	 * Return the elements in A and B that are not in the other list, as determined
+	 * by the examiner. If failfast is used then the results will be incomplete,
+	 * and are only reliable as an indication of whether the difference is non-empty.
+	 * This code assumes that individual examination calls are expensive, and makes
+	 * an effort to reduce their number.
+	 * @param e
+	 * @param a
+	 * @param b
+	 * @param failfast
+	 * @return
+	 */
+	public static <T extends Examinable, L extends List<T>> Tuple<? extends List<T>,? extends List<T>> symmetricDifference(final Examiner e, final L a, final L b, final boolean failfast) {
+		final ImmutableList<T> empty = ImmutableList.of();
+		if (a == null && b == null) return new Tuple<List<T>,List<T>>(empty,empty);
+		if (a == null) return new Tuple<List<T>,List<T>>(empty,b);
+		if (b == null) return new Tuple<List<T>,List<T>>(a,empty);
+		if (failfast) {
+			if (a.size() != b.size()) return new Tuple<List<T>,List<T>>(a,b);
+		}
 		// now we know that both are not null
-		final int size = b.size();
-		if (a.size() != size) return false;
-		final BitSet bits = new BitSet(size);
+		ImmutableList<T> aResult = empty;
+		final int sizeB = b.size();
+		final BitSet bitsB = new BitSet(sizeB);
+		// check that everything in A is also in B
 		for (final T x : a) {
 			boolean matched = false;
-			for (int i = 0; i < size; i++) {
-				if (!bits.get(i)) {
+			for (int j = 0; j < sizeB; j++) {
+				if (!bitsB.get(j)) {
 					// we haven't matched this index yet, try to do so now
-					final Examinable y = b.get(i);
+					final T y = b.get(j);
 					if (e.examine(x, y)) {
 						// matched!
 						matched = true;
-						bits.set(i);
+						bitsB.set(j);
 						break;
 					}
 				}
 			}
-			if (!matched) return false;
+			if (!matched) {
+				aResult = aResult.append(x);
+				if (failfast) return new Tuple<List<T>,List<T>>(aResult,empty);
+			}
 		}
-		return true;
+		// what didn't match from B?
+		ImmutableList<T> bResult = empty;
+		for (int i = 0; i < sizeB; i++) {
+			if (!bitsB.get(i)) {
+				bResult = bResult.append(b.get(i));
+			}
+		}
+		return new Tuple<List<T>,List<T>>(aResult,bResult);
 	}
 	
 	/**
