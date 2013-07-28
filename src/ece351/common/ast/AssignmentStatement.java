@@ -2,6 +2,9 @@ package ece351.common.ast;
 
 import java.util.Set;
 
+import org.parboiled.common.ImmutableList;
+
+import ece351.f.ast.FProgram;
 import ece351.util.Examinable;
 import ece351.util.CommandLine.FSimplifierOptions;
 import ece351.vhdl.ast.Statement;

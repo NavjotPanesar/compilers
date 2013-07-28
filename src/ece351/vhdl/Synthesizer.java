@@ -58,8 +58,33 @@ public final class Synthesizer extends PostOrderVExprVisitor {
 	private FProgram synthesizeit(final VProgram root) {	
 		FProgram result = new FProgram();
 			// set varPrefix for this design unit
-// TODO: 22 lines snipped
-throw new ece351.util.Todo351Exception();
+		for(DesignUnit dunit : root.designUnits){
+			this.varPrefix = dunit.arch.entityName;
+			for(Statement stm : dunit.arch.statements){
+				if(stm instanceof Process){
+					for(Statement p_stm : ((Process)stm).sequentialStatements){
+						if(p_stm instanceof IfElseStatement){
+							//for(AssignmentStatement f : ((FProgram)this.implication((IfElseStatement)p_stm)).formulas){
+							//	result = result.append(f);
+							//}
+							result = result.appendAll((FProgram)this.implication((IfElseStatement)p_stm));
+						}else{
+							result = result.append(
+									new AssignmentStatement(
+									(VarExpr)this.traverse((Expr)((AssignmentStatement)p_stm).outputVar),
+									this.traverse(((AssignmentStatement)p_stm).expr))
+									);
+						}
+					}
+				}else{
+					result = result.append(
+							new AssignmentStatement(
+							(VarExpr)this.traverse((Expr)((AssignmentStatement)stm).outputVar),
+							this.traverse(((AssignmentStatement)stm).expr))
+							);
+				}
+			}
+		}
 		return result;
 	}
 	
@@ -76,10 +101,17 @@ throw new ece351.util.Todo351Exception();
 		if (!ifb.outputVar.equals(elb.outputVar)) {
 			throw new IllegalArgumentException("if/else statement: " + statement + "\n can only have one assignment statement in the if-body and else-body where the output variable is the same!");
 		}
-
-		// build result
-// TODO: 10 lines snipped
-throw new ece351.util.Todo351Exception();
+		FProgram result = new FProgram();
+		this.condCount++;
+		VarExpr condition = new VarExpr(conditionPrefix+condCount);
+		result = result.append(new AssignmentStatement(condition,this.traverse(statement.condition)));
+		result = result.append(new AssignmentStatement(varPrefix+ifb.outputVar,
+				new OrExpr(
+						new AndExpr(condition,this.traverse(ifb.expr)),
+						new AndExpr(new NotExpr(condition),this.traverse(elb.expr))
+						))
+				);
+		return result;
 	}
 
 	/** Rewrite var names with prefix to mitigate name collision. */

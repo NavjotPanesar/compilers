@@ -56,13 +56,70 @@ public final class Splitter extends PostOrderVExprVisitor {
 	private VProgram splitit(final VProgram program) {
 					// Determine if the process needs to be split into multiple processes
 						// Split the process if there are if/else statements so that the if/else statements only assign values to one pin
-// TODO: 35 lines snipped
-throw new ece351.util.Todo351Exception();
+		VProgram result = new VProgram();
+		for(DesignUnit dunit : program.designUnits){
+			Architecture modArch = dunit.arch;
+			ImmutableList<Statement> final_processes = ImmutableList.<Statement>of();
+			for(Statement stm : dunit.arch.statements){
+				if(stm instanceof Process){
+					Boolean contains_assignments = false;
+					Process assignment_proc = new Process().setSensitivityList(((Process)stm).sensitivityList);
+					for(Statement p_stm : ((Process)stm).sequentialStatements){
+						if(p_stm instanceof IfElseStatement){
+							ImmutableList<Statement> split_stm = splitIfElseStatement((IfElseStatement)p_stm);//create a list of processes
+							for(Statement split_proc : split_stm){
+								final_processes = final_processes.append(split_proc);
+							}
+						}else{
+							contains_assignments = true;
+							//this.usedVarsInExpr.clear();
+							//this.traverse(((AssignmentStatement)p_stm).expr);
+							//for(String sens : usedVarsInExpr){
+							//	if(!assignment_proc.sensitivityList.contains(sens)){
+							//		assignment_proc = assignment_proc.appendSensitivity(sens);
+							//	}
+							//}
+							assignment_proc = assignment_proc.appendStatement(p_stm);
+						}
+					}
+					if(contains_assignments){
+						final_processes = final_processes.append(assignment_proc);
+					}
+				}else{
+					final_processes = final_processes.append(stm);
+				}
+			}
+			modArch = modArch.setStatements(final_processes);
+			result = result.append(dunit.setArchitecture(modArch));
+		}
+		return result;
 	}
 	
 	// You do not have to use this helper method, but we found it useful
 	
 	private ImmutableList<Statement> splitIfElseStatement(final IfElseStatement ifStmt) {
+		ImmutableList<Statement> processes = ImmutableList.<Statement>of();
+		for(Statement if_stm : ifStmt.ifBody){
+			String if_output = ((AssignmentStatement)if_stm).outputVar.identifier;
+			for(Statement else_stm :ifStmt.elseBody){
+				if(if_output.equals(((AssignmentStatement)else_stm).outputVar.identifier)){
+					this.usedVarsInExpr.clear();
+					this.traverse(ifStmt.condition);
+					this.traverse(((AssignmentStatement)if_stm).expr);
+					this.traverse(((AssignmentStatement)else_stm).expr);
+					Process split_proc = new Process();
+					IfElseStatement split_if = new IfElseStatement(ImmutableList.<AssignmentStatement>of().append((AssignmentStatement)else_stm),
+																ImmutableList.<AssignmentStatement>of().append((AssignmentStatement)if_stm),
+																ifStmt.condition);
+					split_proc = split_proc.appendStatement(split_if);
+					for(String sens : usedVarsInExpr){
+						split_proc = split_proc.appendSensitivity(sens);
+					}
+					processes = processes.append(split_proc);
+				}
+			}
+		}
+		return processes;
 		// loop over each statement in the ifBody
 			// loop over each statement in the elseBody
 				// check if outputVars are the same
@@ -71,8 +128,6 @@ throw new ece351.util.Todo351Exception();
 					// build sensitivity list from this.usedVarsInExpr
 					// build the resulting list of split statements
 		// return result
-// TODO: 34 lines snipped
-throw new ece351.util.Todo351Exception();
 	}
 
 	@Override

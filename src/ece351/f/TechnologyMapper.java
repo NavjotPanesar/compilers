@@ -91,7 +91,7 @@ public final class TechnologyMapper extends PostOrderFExprVisitor {
 		for(Expr current: exprs){
 			if(!substitutions.containsKey(current)){
 				for(Expr compare:exprs){
-					if(compare.equivalent(current)){
+					if(compare.isomorphic(current)){
 						substitutions.put(compare, current);
 					}
 				}
