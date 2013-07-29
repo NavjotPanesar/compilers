@@ -1,0 +1,8 @@
+# This is a comment line.
+# Non-comment lines do not start with an octothorpe (#)
+# Indicate which labs you would like remarked in this file.
+# One lab per line.
+# For example, to indicate you would like lab 1 remarked, uncomment
+# the next line:
+# lab1
+
