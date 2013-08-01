@@ -1,0 +1,25 @@
+digraph g {
+    // header
+    rankdir=LR;
+    margin=0.01;
+    node [shape="plaintext"];
+    edge [arrowhead="diamond"];
+    // circuit 
+    and184 [label="and184", image="../../gates/and_noleads.png"];
+    or173 [label="or173", image="../../gates/or_noleads.png"];
+    or70 [label="or70", image="../../gates/or_noleads.png"];
+    var0[label="n"];
+    var10[label="a"];
+    var13[label="c"];
+    var5[label="d"];
+    var8[label="m"];
+    var9[label="b"];
+    var10 -> or70 ;
+    var9 -> or70 ;
+    var13 -> or173 ;
+    var5 -> or173 ;
+    or70 -> and184 ;
+    or173 -> and184 ;
+    and184 -> var0 ;
+    and184 -> var8 ;
+}
