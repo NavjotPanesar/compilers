@@ -1,0 +1,2 @@
+full_addero <= ( ( full_addera and full_adderb ) or ( full_adderc and ( ( full_addera and ( not ( full_adderb ) ) ) or ( ( not ( full_addera ) ) and full_adderb ) ) ) );
+full_adders <= ( ( full_adderc and ( not ( ( ( full_addera and ( not ( full_adderb ) ) ) or ( ( not ( full_addera ) ) and full_adderb ) ) ) ) ) or ( ( not ( full_adderc ) ) and ( ( full_addera and ( not ( full_adderb ) ) ) or ( ( not ( full_addera ) ) and full_adderb ) ) ) );
